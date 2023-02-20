@@ -8,8 +8,16 @@ module Api
     end
 
     def index
-      activity_types = ActivityType.all
-      render json: activity_types
+      activity_types = ActivityType.search(params).paginate(page: page, per_page: per_page)
+      render json: activity_types, each_serializer: ActivityTypeSerializer, meta: meta_attributes(activity_types)
+    end
+
+    def meta_attributes(activity_types)
+      { 
+        per_page: per_page,
+        total_pages: activity_types.total_pages,
+        total_objects: activity_types.total_entries
+      }
     end
 
     def show
