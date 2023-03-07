@@ -9,7 +9,7 @@ class ActivityType < ApplicationRecord
     end
 
     def global_search(text)
-      where("name LIKE :search OR description LIKE :search", search: "%#{text}%")
+      where("name ILIKE :search OR description ILIKE :search", search: "%#{text}%")
     end
   end
 end
