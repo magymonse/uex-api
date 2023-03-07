@@ -5,5 +5,6 @@ Rails.application.routes.draw do
   # root "articles#index"
   namespace :api, defaults: {format: :json} do
     resources :activity_types, only: [:create, :update, :delete, :show, :index, :destroy]
+    resources :careers, only: [:create, :update, :delete, :show, :index, :destroy]
   end
 end
