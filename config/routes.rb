@@ -5,5 +5,10 @@ Rails.application.routes.draw do
   # root "articles#index"
   namespace :api, defaults: {format: :json} do
     resources :activity_types, only: [:create, :update, :delete, :show, :index, :destroy]
+    resources :users, only: [:show]
   end
+
+  post "refresh", controller: :refresh, action: :create
+  post "signin", controller: :signin, action: :create
+  delete "signin", controller: :signin, action: :destroy
 end
