@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: :json} do
     resources :activity_types, only: [:create, :update, :delete, :show, :index, :destroy]
     resources :users, only: [:show]
+    resources :careers, only: [:create, :update, :delete, :show, :index, :destroy]
   end
 
   post "refresh", controller: :refresh, action: :create
