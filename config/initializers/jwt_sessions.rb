@@ -1,0 +1,1 @@
+JWTSessions.signing_key = 'my secret key for uex'
