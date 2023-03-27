@@ -1,5 +1,5 @@
 module Api
-    class CareersController < ApplicationController
+    class CareersController < Api::BaseController
       before_action :set_career, only: [:create, :show, :update, :destroy]
   
       def create

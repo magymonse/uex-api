@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     resources :activity_types, only: [:create, :update, :delete, :show, :index, :destroy]
     resources :users, only: [:show]
     resources :careers, only: [:create, :update, :delete, :show, :index, :destroy]
+    resources :students, only: [:create, :update, :delete, :show, :index, :destroy]
   end
 
   post "refresh", controller: :refresh, action: :create
