@@ -1,5 +1,5 @@
 class Student < ApplicationRecord
-  belongs_to :person
+  belongs_to :person, dependent: :destroy
   belongs_to :career
 
   accepts_nested_attributes_for :person
