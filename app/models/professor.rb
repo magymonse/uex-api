@@ -1,8 +1,9 @@
-class Student < ApplicationRecord
+class Professor < ApplicationRecord
   belongs_to :person, dependent: :destroy
-  belongs_to :career
+  has_many :professor_careers, dependent: :destroy
 
   accepts_nested_attributes_for :person
+  accepts_nested_attributes_for :professor_careers, allow_destroy: true
 
   class << self
     def search(params)
