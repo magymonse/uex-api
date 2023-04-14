@@ -1,4 +1,4 @@
-class Api::OrganizationController < Api::BaseController
+class Api::OrganizationsController < Api::BaseController
   before_action :set_organization, only: [:create, :show, :update, :destroy]
 
   def create
