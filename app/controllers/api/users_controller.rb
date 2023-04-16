@@ -1,8 +1,33 @@
 class Api::UsersController < Api::BaseController
   before_action :set_user, only: [:create, :show, :update, :destroy]
 
+  def create
+    @user.save!
+    render json: @user
+  end
+
+  def index
+    users = User.search(params).paginate(page: page, per_page: per_page)
+    render json: users, each_serializer: UserSerializer, meta: meta_attributes(users)
+  end
+
+  def meta_attributes(users)
+    {
+      per_page: per_page,
+      total_pages: users.total_pages,
+      total_objects: users.total_entries
+    }
+  end
   def show
     render json: @user
+  end
+  def update
+    @user.update!(user_params)
+    render json: @user
+  end
+
+  def destroy
+    @user.destroy!
   end
 
   def set_user
