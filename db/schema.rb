@@ -10,15 +10,77 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_13_014100) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_20_051326) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "activities", force: :cascade do |t|
+    t.string "name"
+    t.string "status"
+    t.string "address"
+    t.boolean "virtual_participation"
+    t.bigint "activity_type_id", null: false
+    t.bigint "organizing_organization_id"
+    t.bigint "parther_organization_id"
+    t.string "project_link"
+    t.integer "hours"
+    t.integer "ods_vinculation"
+    t.boolean "institutional_program"
+    t.string "institutional_extension_line"
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_type_id"], name: "index_activities_on_activity_type_id"
+    t.index ["organizing_organization_id"], name: "index_activities_on_organizing_organization_id"
+    t.index ["parther_organization_id"], name: "index_activities_on_parther_organization_id"
+  end
+
+  create_table "activity_careers", force: :cascade do |t|
+    t.bigint "career_id", null: false
+    t.bigint "activity_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_id"], name: "index_activity_careers_on_activity_id"
+    t.index ["career_id"], name: "index_activity_careers_on_career_id"
+  end
 
   create_table "activity_types", force: :cascade do |t|
     t.string "name"
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "activity_week_participants", force: :cascade do |t|
+    t.integer "hours"
+    t.string "evaluation"
+    t.bigint "activity_week_id", null: false
+    t.bigint "person_id", null: false
+    t.string "entity_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_week_id"], name: "index_activity_week_participants_on_activity_week_id"
+    t.index ["person_id"], name: "index_activity_week_participants_on_person_id"
+  end
+
+  create_table "activity_weeks", force: :cascade do |t|
+    t.bigint "activity_id", null: false
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_id"], name: "index_activity_weeks_on_activity_id"
+  end
+
+  create_table "beneficiary_details", force: :cascade do |t|
+    t.bigint "activity_id", null: false
+    t.integer "number_of_men"
+    t.integer "number_of_women"
+    t.integer "total"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_id"], name: "index_beneficiary_details_on_activity_id"
   end
 
   create_table "careers", force: :cascade do |t|
@@ -84,6 +146,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_014100) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "activities", "activity_types"
+  add_foreign_key "activities", "organizations", column: "organizing_organization_id"
+  add_foreign_key "activities", "organizations", column: "parther_organization_id"
+  add_foreign_key "activity_careers", "activities"
+  add_foreign_key "activity_careers", "careers"
+  add_foreign_key "activity_week_participants", "activity_weeks"
+  add_foreign_key "activity_week_participants", "people"
+  add_foreign_key "activity_weeks", "activities"
+  add_foreign_key "beneficiary_details", "activities"
   add_foreign_key "professor_careers", "careers"
   add_foreign_key "professor_careers", "professors"
   add_foreign_key "professors", "people"
