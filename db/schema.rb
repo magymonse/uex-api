@@ -19,9 +19,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_051326) do
     t.string "status"
     t.string "address"
     t.boolean "virtual_participation"
+    t.bigint "professor_id", null: false
     t.bigint "activity_type_id", null: false
     t.bigint "organizing_organization_id"
-    t.bigint "parther_organization_id"
+    t.bigint "partner_organization_id"
     t.string "project_link"
     t.integer "hours"
     t.integer "ods_vinculation"
@@ -33,7 +34,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_051326) do
     t.datetime "updated_at", null: false
     t.index ["activity_type_id"], name: "index_activities_on_activity_type_id"
     t.index ["organizing_organization_id"], name: "index_activities_on_organizing_organization_id"
-    t.index ["parther_organization_id"], name: "index_activities_on_parther_organization_id"
+    t.index ["partner_organization_id"], name: "index_activities_on_partner_organization_id"
+    t.index ["professor_id"], name: "index_activities_on_professor_id"
   end
 
   create_table "activity_careers", force: :cascade do |t|
@@ -148,7 +150,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_051326) do
 
   add_foreign_key "activities", "activity_types"
   add_foreign_key "activities", "organizations", column: "organizing_organization_id"
-  add_foreign_key "activities", "organizations", column: "parther_organization_id"
+  add_foreign_key "activities", "organizations", column: "partner_organization_id"
+  add_foreign_key "activities", "professors"
   add_foreign_key "activity_careers", "activities"
   add_foreign_key "activity_careers", "careers"
   add_foreign_key "activity_week_participants", "activity_weeks"
