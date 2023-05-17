@@ -8,8 +8,16 @@ Rails.application.routes.draw do
     resources :users, only: [:create, :delete, :show, :index, :destroy]
     resources :careers, only: [:create, :update, :delete, :show, :index, :destroy]
     resources :organizations, only: [:create, :update, :delete, :show, :index, :destroy]
-    resources :students, only: [:create, :update, :delete, :show, :index, :destroy]
-    resources :professors, only: [:create, :update, :delete, :show, :index, :destroy]
+    resources :students, only: [:create, :update, :delete, :show, :index, :destroy] do
+      collection do
+        post :import_csv
+      end
+    end
+    resources :professors, only: [:create, :update, :delete, :show, :index, :destroy]do
+      collection do
+        post :import_csv
+      end
+    end
   end
 
   post "refresh", controller: :refresh, action: :create
