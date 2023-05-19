@@ -51,6 +51,12 @@ class Api::ProfessorsController < Api::BaseController
       )
       professor= Professor.new(person: person)
 
+      careers_row = row[6]
+      careers_row.gsub!('"','')
+      career_names= careers_row.split(',')
+      careers = Career.where(name: career_names)
+      professor.careers = careers
+
       # Guardar el estudiante en la base de datos
       unless professor.save
         render json: { error: "Error al importar el estudiante en la fila #{index + 1}: #{professor.errors.full_messages.join(', ')}" }, status: :unprocessable_entity and return
