@@ -1,4 +1,4 @@
-class Api::ActitvityWeekParticipantsController < Api::BaseController
+class Api::ActivityWeekParticipantsController < Api::BaseController
   before_action :set_activity_week_participant, only: [:create, :show, :update, :destroy]
 
   def create
@@ -7,8 +7,8 @@ class Api::ActitvityWeekParticipantsController < Api::BaseController
   end
 
   def index
-    activity_week_participant = ActitvityWeekParticipant.search(params).paginate(page: page, per_page: per_page)
-    render json: activity_week_participants, each_serializer: ActivityTypeSerializer, meta: meta_attributes(activity_week_participants)
+    activity_week_participants = ActivityWeekParticipant.includes(:participable).search(params).paginate(page: page, per_page: per_page)
+    render json: activity_week_participants, each_serializer: ActivityWeekParticipantSerializer, meta: meta_attributes(activity_week_participants)
   end
 
   def meta_attributes(activity_week_participants)
@@ -35,13 +35,13 @@ class Api::ActitvityWeekParticipantsController < Api::BaseController
   private
   def set_activity_week_participant
     @activity_week_participant = if params[:id]
-      ActitvityWeekParticipant.find(params[:id])
+      ActivityWeekParticipant.find(params[:id])
     else
-      ActitvityWeekParticipant.new(activity_week_participant_params)
+      ActivityWeekParticipant.new(activity_week_participant_params)
     end
   end
 
   def activity_week_participant_params
-    params.require(:activity_week_participant).permit(:activity_week_id, :hours, :evaluation, :person_id, :entity_type)
+    params.require(:activity_week_participant).permit(:activity_week_id, :participable_id, :participable_type, :hours, :evaluation)
   end
 end

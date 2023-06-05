@@ -4,8 +4,7 @@ class CreateActivityWeekParticipant < ActiveRecord::Migration[7.0]
       t.integer :hours
       t.string :evaluation
       t.references :activity_week, null: false, foreign_key: true
-      t.references :person, null: false, foreign_key: true
-      t.string :entity_type
+      t.references :participable, polymorphic: true
 
       t.timestamps
     end

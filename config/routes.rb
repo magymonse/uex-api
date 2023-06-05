@@ -11,7 +11,8 @@ Rails.application.routes.draw do
     resources :students, only: [:create, :update, :show, :index, :destroy]
     resources :professors, only: [:create, :update, :show, :index, :destroy]
     resources :activities, only: [:create, :update, :show, :index, :destroy]
-    resources :activity_week_participant, only: [:create, :update, :show, :index, :destroy]
+    resources :activity_weeks, only: [:create, :update, :show, :index, :destroy]
+    resources :activity_week_participants, only: [:create, :update, :show, :index, :destroy]
   end
 
   post "refresh", controller: :refresh, action: :create

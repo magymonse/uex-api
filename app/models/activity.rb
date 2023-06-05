@@ -6,6 +6,8 @@ class Activity < ApplicationRecord
   has_many :activity_careers
   has_many :activity_weeks
   has_one :beneficiary_detail
+
+  validates_uniqueness_of :name
   validates_presence_of :name, :hours
 
   accepts_nested_attributes_for :activity_careers, allow_destroy: true

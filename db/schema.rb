@@ -58,12 +58,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_051326) do
     t.integer "hours"
     t.string "evaluation"
     t.bigint "activity_week_id", null: false
-    t.bigint "person_id", null: false
-    t.string "entity_type"
+    t.string "participable_type"
+    t.bigint "participable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["activity_week_id"], name: "index_activity_week_participants_on_activity_week_id"
-    t.index ["person_id"], name: "index_activity_week_participants_on_person_id"
+    t.index ["participable_type", "participable_id"], name: "index_activity_week_participants_on_participable"
   end
 
   create_table "activity_weeks", force: :cascade do |t|
@@ -155,7 +155,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_051326) do
   add_foreign_key "activity_careers", "activities"
   add_foreign_key "activity_careers", "careers"
   add_foreign_key "activity_week_participants", "activity_weeks"
-  add_foreign_key "activity_week_participants", "people"
   add_foreign_key "activity_weeks", "activities"
   add_foreign_key "beneficiary_details", "activities"
   add_foreign_key "professor_careers", "careers"
