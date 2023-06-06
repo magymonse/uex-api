@@ -7,5 +7,4 @@ class ActivitySerializer < ActiveModel::Serializer
   belongs_to :partner_organization
   belongs_to :professor
   has_many :activity_careers
-  has_many :activity_weeks
 end

@@ -7,7 +7,7 @@ class Api::ActivityWeekParticipantsController < Api::BaseController
   end
 
   def index
-    activity_week_participants = ActivityWeekParticipant.includes(:participable).search(params).paginate(page: page, per_page: per_page)
+    activity_week_participants = ActivityWeekParticipant.includes(includes).search(params).paginate(page: page, per_page: per_page)
     render json: activity_week_participants, each_serializer: ActivityWeekParticipantSerializer, meta: meta_attributes(activity_week_participants)
   end
 
@@ -35,10 +35,14 @@ class Api::ActivityWeekParticipantsController < Api::BaseController
   private
   def set_activity_week_participant
     @activity_week_participant = if params[:id]
-      ActivityWeekParticipant.find(params[:id])
+      ActivityWeekParticipant.includes(includes).find(params[:id])
     else
       ActivityWeekParticipant.new(activity_week_participant_params)
     end
+  end
+
+  def includes
+    [participable: [:person, :careers]]
   end
 
   def activity_week_participant_params

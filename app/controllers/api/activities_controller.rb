@@ -7,7 +7,7 @@ class Api::ActivitiesController < Api::BaseController
   end
 
   def index
-    activities = Activity.search(params).includes(:activity_type).paginate(page: page, per_page: per_page)
+    activities = Activity.search(params).includes(includes).paginate(page: page, per_page: per_page)
     render json: activities, each_serializer: ActivitySerializer, meta: meta_attributes(activities)
   end
 
@@ -35,10 +35,16 @@ class Api::ActivitiesController < Api::BaseController
   private
   def set_activity
     @activity = if params[:id]
-      Activity.includes({professor: :person}, :activity_type, :organizing_organization, :partner_organization, :activity_careers, :beneficiary_detail).find(params[:id])
+      Activity.includes(includes).find(params[:id])
     else
       Activity.new(activity_params)
     end
+  end
+
+  # Currently this method is also used in the index serializer we should create a different includes method to preload data on index actions
+  # and pass as well to the serializer so that it doesn't try to load unnecesary data only if it's specified
+  def includes
+    [ :activity_type, :organizing_organization, :partner_organization, :activity_careers, :beneficiary_detail, {professor: :person} ]
   end
 
   def activity_params
