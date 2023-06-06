@@ -12,7 +12,7 @@ gem "pg", "~> 1.1"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"
 
-gem 'will_paginate', '~> 3.3'
+gem "will_paginate", "~> 3.3"
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
@@ -23,7 +23,7 @@ gem "redis", "~> 4.0"
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
 
-gem 'roo'
+gem "roo"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem "bcrypt", "~> 3.1.7"
@@ -41,13 +41,15 @@ gem "bootsnap", require: false
 gem "rack-cors"
 
 # ActiveModelSerializers brings convention over configuration to your JSON generation.
-gem 'active_model_serializers'
+gem "active_model_serializers"
 
 # Provide configurable, manageable, and safe stateful sessions based on JSON Web Tokens.
 gem "jwt_sessions"
 
 # A library for bulk insertion of data into your database using ActiveRecord [https://github.com/zdennis/activerecord-import]
 gem "activerecord-import", "~> 1.4"
+
+gem "rails-i18n", "~> 7.0.0"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

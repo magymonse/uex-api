@@ -1,6 +1,9 @@
 class StudentCSV
   def initialize(csv_file_path)
     @csv_file_path = csv_file_path
+    @students_careers = {}
+    @persons = []
+    @successful_import_count = 0
     @errors = {}
   end
 
@@ -11,8 +14,8 @@ class StudentCSV
   end
 
   def result_msg
-    msg = "Se importaron #{@successful_import_count} registros"
-    msg << ". Filas no importadas: #{@errors}" if @errors.any?
+    msg = I18n.t("services.importers.imported_records", count: @successful_import_count)
+    msg << ". " + I18n.t("services.importers.no_imported_records", rows_errors: rows_errors) if @errors.any?
     msg
   end
 
@@ -20,7 +23,6 @@ class StudentCSV
 
   def import_persons
     persons = []
-    @students_careers = {}
     careers = Career.pluck(:name, :id).to_h
     index = 1
 
@@ -68,5 +70,9 @@ class StudentCSV
     Person.where(id: persons_to_delete).delete_all
     import_result = Student.import(students, validate: false)
     @successful_import_count = import_result.ids.size
+  end
+
+  def rows_errors
+    @errors.map { |key, value| "#{key} => #{value}"}.join(", ")
   end
 end

@@ -36,7 +36,7 @@ RSpec.describe StudentCSV do
       end
 
       it "import without errors" do
-        expect(@student_csv.result_msg).to eq("Se importaron 0 registros. Filas no importadas: {2=>\"Email can't be blank and Email is invalid\", 1=>\"Career must exist\"}")
+        expect(@student_csv.result_msg).to eq("Se importaron 0 registros. Filas no importadas: 2 => Correo no puede estar en blanco y Correo no es válido, 1 => Carrera debe existir")
       end
     end
   end
