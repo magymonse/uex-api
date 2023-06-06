@@ -21,7 +21,11 @@ class Activity < ApplicationRecord
     end
 
     def global_search(text)
-      joins(:activity_type).where("activities.name ILIKE :search OR activity_types.name ILIKE :search", search: "%#{text}%")
+      joins(:activity_type, professor: :person)
+        .where(
+          "activities.name ILIKE :search OR activity_types.name ILIKE :search OR CONCAT_WS(' ', first_name, last_name) ILIKE :search",
+          search: "%#{text}%"
+        )
     end
   end
 end
