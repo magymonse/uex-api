@@ -46,6 +46,9 @@ gem 'active_model_serializers'
 # Provide configurable, manageable, and safe stateful sessions based on JSON Web Tokens.
 gem "jwt_sessions"
 
+# A library for bulk insertion of data into your database using ActiveRecord [https://github.com/zdennis/activerecord-import]
+gem "activerecord-import", "~> 1.4"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
