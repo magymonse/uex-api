@@ -12,7 +12,7 @@ class Api::ProfessorsController < Api::BaseController
   end
 
   def meta_attributes(professors)
-    { 
+    {
       per_page: per_page,
       total_pages: professors.total_pages,
       total_objects: professors.total_entries
@@ -31,7 +31,41 @@ class Api::ProfessorsController < Api::BaseController
   def destroy
     @professor.destroy!
   end
+  def import_csv
+    # Leer el archivo CSV enviado por el cliente
+    file = params[:file]
+    spreadsheet = Roo::CSV.new(file.path)
 
+    # Procesar los datos del archivo CSV
+    spreadsheet.each_with_index do |row, index|
+      next if index.zero? # Ignorar la primera fila (encabezados)
+
+      # Crear un nuevo estudiante a partir de los datos del archivo CSV
+      person = Person.new(
+        first_name: row[0],
+        last_name: row[1],
+        email: row[2],
+        phone_number: row[3],
+        id_card: row[4],
+        address: row[5]
+      )
+      professor= Professor.new(person: person)
+
+      careers_row = row[6]
+      careers_row.gsub!('"','')
+      career_names= careers_row.split(',')
+      careers = Career.where(name: career_names)
+      professor.careers = careers
+
+      # Guardar el estudiante en la base de datos
+      unless professor.save
+        render json: { error: "Error al importar el estudiante en la fila #{index + 1}: #{professor.errors.full_messages.join(', ')}" }, status: :unprocessable_entity and return
+      end
+    end
+
+    # Devolver una respuesta exitosa al cliente
+    render json: { message: 'Importación exitosa de estudiantes desde archivo CSV' }, status: :ok
+  end
   private
   def set_professor
     @professor = if params[:id]

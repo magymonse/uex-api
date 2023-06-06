@@ -8,8 +8,16 @@ Rails.application.routes.draw do
     resources :users, only: [:create, :show, :index, :destroy]
     resources :careers, only: [:create, :update, :show, :index, :destroy]
     resources :organizations, only: [:create, :update, :show, :index, :destroy]
-    resources :students, only: [:create, :update, :show, :index, :destroy]
-    resources :professors, only: [:create, :update, :show, :index, :destroy]
+    resources :students, only: [:create, :update, :show, :index, :destroy] do
+      collection do
+        post :import_csv
+      end
+    end
+    resources :professors, only: [:create, :update, :delete, :show, :index, :destroy]do
+      collection do
+        post :import_csv
+      end
+    end
     resources :activities, only: [:create, :update, :show, :index, :destroy]
     resources :activity_weeks, only: [:create, :update, :show, :index, :destroy]
     resources :activity_week_participants, only: [:create, :update, :show, :index, :destroy]
