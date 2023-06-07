@@ -1,4 +1,5 @@
 class StudentCSV
+  EXPECTED_COLUMNS = %w[first_name last_name email phone_number id_card address career]
   def initialize(csv_file_path)
     @csv_file_path = csv_file_path
     @students_careers = {}
@@ -31,6 +32,8 @@ class StudentCSV
     index = 1
 
     CSV.foreach(@csv_file_path, headers: true) do |row|
+      break unless valid_columns?(row.headers)
+
       career_id, id_card = get_values(careers, row)
       person = Person.new(row.to_h.except("career"))
       if person.valid?
@@ -87,6 +90,15 @@ class StudentCSV
   def valid_file?
     if @csv_file_path.blank?
       @validation_errors << I18n.t("services.importers.blank_csv_file")
+      return false
+    end
+    true
+  end
+
+  def valid_columns?(received_columns)
+    missing_columns = EXPECTED_COLUMNS - received_columns
+    if missing_columns.any?
+      @validation_errors << I18n.t("services.importers.missing_columns", missing_columns: missing_columns.join(", "))
       return false
     end
     true

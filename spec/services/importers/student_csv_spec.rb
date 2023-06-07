@@ -31,12 +31,43 @@ RSpec.describe StudentCSV do
         @student_csv.import
       end
 
-      it "populate database" do
+      it "not populate database" do
         expect(Student.count).to eq(0)
       end
 
       it "import without errors" do
         expect(@student_csv.import_result_msg).to eq("Se importaron 0 registros. Filas no importadas:  Fila 2 => Correo no puede estar en blanco y Correo no es válido,  Fila 1 => Carrera debe existir")
+      end
+    end
+
+    context "without file" do
+      before do
+        @student_csv = StudentCSV.new(nil)
+        @student_csv.import
+      end
+
+      it "not populate database" do
+        expect(Student.count).to eq(0)
+      end
+
+      it "import without errors" do
+        expect(@student_csv.import_result_msg).to eq("No se recibió ningún archivo")
+      end
+    end
+
+    context "with invalid csv columns" do
+      before do
+        csv_file_path = Rails.root.join("spec/support/files/invalid_students_columns.csv")
+        @student_csv = StudentCSV.new(csv_file_path)
+        @student_csv.import
+      end
+
+      it "not populate database" do
+        expect(Student.count).to eq(0)
+      end
+
+      it "import without errors" do
+        expect(@student_csv.import_result_msg).to eq("No se encontraron las columnas: last_name")
       end
     end
   end
