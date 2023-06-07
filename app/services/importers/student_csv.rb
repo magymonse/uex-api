@@ -4,18 +4,22 @@ class StudentCSV
     @students_careers = {}
     @persons = []
     @successful_import_count = 0
-    @errors = {}
+    @rows_errors = {}
+    @validation_errors = []
   end
 
   def import
+    return unless valid?
+
     import_persons
     import_students
-    true
   end
 
-  def result_msg
+  def import_result_msg
+    return @validation_errors.join(". ") if @validation_errors.any?
+
     msg = I18n.t("services.importers.imported_records", count: @successful_import_count)
-    msg << ". " + I18n.t("services.importers.no_imported_records", rows_errors: rows_errors) if @errors.any?
+    msg << ". " + I18n.t("services.importers.no_imported_records", rows_errors: rows_errors) if @rows_errors.any?
     msg
   end
 
@@ -33,7 +37,7 @@ class StudentCSV
         persons << person
         @students_careers[id_card] = career_id
       else
-        @errors[index] = person.errors.full_messages.to_sentence
+        @rows_errors[index] = person.errors.full_messages.to_sentence
       end
       index += 1
     end
@@ -62,7 +66,7 @@ class StudentCSV
       else
         # Save related person to delete because can't exist person without related student
         persons_to_delete.push(person_id)
-        @errors[index] = student.errors.full_messages.to_sentence
+        @rows_errors[index] = student.errors.full_messages.to_sentence
       end
       index += 1
     end
@@ -73,6 +77,18 @@ class StudentCSV
   end
 
   def rows_errors
-    @errors.map { |key, value| "#{key} => #{value}"}.join(", ")
+    @rows_errors.map { |key, value| " #{I18n.t("services.importers.row")} #{key} => #{value}"}.join(", ")
+  end
+
+  def valid?
+    valid_file?
+  end
+
+  def valid_file?
+    if @csv_file_path.blank?
+      @validation_errors << I18n.t("services.importers.blank_csv_file")
+      return false
+    end
+    true
   end
 end

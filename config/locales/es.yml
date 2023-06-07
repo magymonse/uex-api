@@ -11,3 +11,5 @@ es:
     importers:
       imported_records: Se importaron %{count} registros
       no_imported_records: "Filas no importadas: %{rows_errors}"
+      row: Fila
+      blank_csv_file: No se recibió ningún archivo

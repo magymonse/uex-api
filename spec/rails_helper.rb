@@ -61,3 +61,13 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 end
+
+def login
+  # From: https://medium.com/@alieckaja/rails-api-jwt-auth-vuejs-spa-eb4cf740a3ae
+  user = FactoryBot.create(:user)
+  payload = { email: user.email, password: user.password }
+  session = JWTSessions::Session.new(payload: payload)
+  @tokens = session.login
+  request.cookies[JWTSessions.access_cookie] = @tokens[:access]
+  request.headers[JWTSessions.csrf_header] = @tokens[:csrf]
+end
