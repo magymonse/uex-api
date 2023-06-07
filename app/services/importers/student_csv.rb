@@ -1,3 +1,4 @@
+require Rails.root.join("lib/utility")
 class StudentCSV
   EXPECTED_COLUMNS = %w[first_name last_name email phone_number id_card address career]
   def initialize(csv_file_path)
@@ -17,11 +18,8 @@ class StudentCSV
   end
 
   def import_result_msg
-    return @validation_errors.join(". ") if @validation_errors.any?
-
-    msg = I18n.t("services.importers.imported_records", count: @successful_import_count)
-    msg << ". " + I18n.t("services.importers.no_imported_records", rows_errors: rows_errors) if @rows_errors.any?
-    msg
+    return validation_errors_msg if @validation_errors.any?
+    result_msg
   end
 
   private
@@ -29,6 +27,7 @@ class StudentCSV
   def import_persons
     persons = []
     careers = Career.pluck(:name, :id).to_h
+    careers = careers.transform_keys{ |key| Utility.clean_string(key) }
     index = 1
 
     CSV.foreach(@csv_file_path, headers: true) do |row|
@@ -51,7 +50,7 @@ class StudentCSV
 
   def get_values(careers, row)
     id_card = row["id_card"]
-    career = row["career"]
+    career = Utility.clean_string(row["career"])
     career_id = careers[career]
     return career_id, id_card
   end
@@ -81,6 +80,18 @@ class StudentCSV
 
   def rows_errors
     @rows_errors.map { |key, value| " #{I18n.t("services.importers.row")} #{key} => #{value}"}.join(", ")
+  end
+
+  def validation_errors_msg
+    msg = I18n.t("services.importers.import_fail")
+    msg << ". " +  @validation_errors.join(". ")
+    msg
+  end
+
+  def result_msg
+    msg = I18n.t("services.importers.imported_records", count: @successful_import_count)
+    msg << ". " + I18n.t("services.importers.no_imported_records", rows_errors: rows_errors) if @rows_errors.any?
+    msg
   end
 
   def valid?

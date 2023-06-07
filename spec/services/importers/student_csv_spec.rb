@@ -51,7 +51,7 @@ RSpec.describe StudentCSV do
       end
 
       it "import without errors" do
-        expect(@student_csv.import_result_msg).to eq("No se recibió ningún archivo")
+        expect(@student_csv.import_result_msg).to eq("No se pudo importar ningún registro. No se recibió ningún archivo")
       end
     end
 
@@ -67,7 +67,7 @@ RSpec.describe StudentCSV do
       end
 
       it "import without errors" do
-        expect(@student_csv.import_result_msg).to eq("No se encontraron las columnas: last_name")
+        expect(@student_csv.import_result_msg).to eq("No se pudo importar ningún registro. No se encontraron las columnas: last_name en el archivo indicado")
       end
     end
   end

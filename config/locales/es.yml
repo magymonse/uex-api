@@ -13,4 +13,5 @@ es:
       no_imported_records: "Filas no importadas: %{rows_errors}"
       row: Fila
       blank_csv_file: No se recibió ningún archivo
-      missing_columns: "No se encontraron las columnas: %{missing_columns}"
+      missing_columns: "No se encontraron las columnas: %{missing_columns} en el archivo indicado"
+      import_fail: No se pudo importar ningún registro
