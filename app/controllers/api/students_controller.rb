@@ -11,14 +11,6 @@ class Api::StudentsController < Api::BaseController
     render json: students, each_serializer: StudentSerializer, meta: meta_attributes(students)
   end
 
-  def meta_attributes(students)
-    {
-      per_page: per_page,
-      total_pages: students.total_pages,
-      total_objects: students.total_entries
-    }
-  end
-
   def show
     render json: @student
   end

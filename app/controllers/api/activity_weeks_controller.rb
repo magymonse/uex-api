@@ -11,14 +11,6 @@ class Api::ActivityWeeksController < Api::BaseController
     render json: activity_weeks, each_serializer: ActivityWeekSerializer, meta: meta_attributes(activity_weeks)
   end
 
-  def meta_attributes(activity_weeks)
-    {
-      per_page: per_page,
-      total_pages: activity_weeks.total_pages,
-      total_objects: activity_weeks.total_entries
-    }
-  end
-
   def show
     render json: @activity_week
   end
