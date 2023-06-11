@@ -4,6 +4,7 @@ class Activity < ApplicationRecord
   belongs_to :organizing_organization, class_name: 'Organization', foreign_key: 'organizing_organization_id'
   belongs_to :partner_organization, class_name: 'Organization', foreign_key: 'partner_organization_id'
   has_many :activity_careers
+  has_many :careers, through: :activity_careers
   has_many :activity_weeks
   has_one :beneficiary_detail
 
@@ -16,7 +17,8 @@ class Activity < ApplicationRecord
   class << self
     def search(params)
       scope = where({})
-      scope = global_search(params[:search]) if params[:search]
+      scope = global_search(params[:search]) if params[:search] if params[:search].present?
+      scope = scope.joins(:careers).where(careers: params[:career_id]) if params[:career_id].present?
       scope
     end
 

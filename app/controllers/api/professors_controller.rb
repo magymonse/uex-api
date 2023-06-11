@@ -11,14 +11,6 @@ class Api::ProfessorsController < Api::BaseController
     render json: professors, each_serializer: ProfessorSerializer, meta: meta_attributes(professors)
   end
 
-  def meta_attributes(professors)
-    {
-      per_page: per_page,
-      total_pages: professors.total_pages,
-      total_objects: professors.total_entries
-    }
-  end
-
   def show
     render json: @professor
   end

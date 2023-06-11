@@ -11,14 +11,6 @@ class Api::ActivitiesController < Api::BaseController
     render json: activities, each_serializer: ActivitySerializer, meta: meta_attributes(activities)
   end
 
-  def meta_attributes(activities)
-    { 
-      per_page: per_page,
-      total_pages: activities.total_pages,
-      total_objects: activities.total_entries
-    }
-  end
-
   def show
     render json: @activity
   end
