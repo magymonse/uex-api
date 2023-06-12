@@ -71,7 +71,7 @@ class Api::ProfessorsController < Api::BaseController
     params[:professor][:person_attributes] = params[:professor].delete(:person)
     params[:professor][:professor_careers_attributes] = params[:professor].delete(:professor_careers)
     params.require(:professor).permit(
-      person_attributes: [:id, :name, :first_name, :last_name, :email, :phone_number, :id_card, :address],
+      person_attributes: [:id, :name, :first_name, :last_name, :email, :phone_number, :id_card, :address, :sex],
       professor_careers_attributes: [:id, :career_id, :_destroy]
     )
   end

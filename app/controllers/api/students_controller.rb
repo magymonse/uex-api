@@ -71,6 +71,6 @@ class Api::StudentsController < Api::BaseController
   def student_params
     params[:student][:person_attributes] = params[:student].delete(:person)
     params.require(:student).permit(:id, :hours, :submitted, :admission_year, :career_id,
-      person_attributes: [:id, :name, :first_name, :last_name, :email, :phone_number, :id_card, :address])
+      person_attributes: [:id, :name, :first_name, :last_name, :email, :phone_number, :id_card, :address, :sex])
   end
 end

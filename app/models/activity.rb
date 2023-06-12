@@ -3,10 +3,10 @@ class Activity < ApplicationRecord
   belongs_to :professor
   belongs_to :organizing_organization, class_name: 'Organization', foreign_key: 'organizing_organization_id'
   belongs_to :partner_organization, class_name: 'Organization', foreign_key: 'partner_organization_id'
-  has_many :activity_careers
+  has_many :activity_careers, dependent: :destroy
   has_many :careers, through: :activity_careers
-  has_many :activity_weeks
-  has_one :beneficiary_detail
+  has_many :activity_weeks, dependent: :destroy
+  has_one :beneficiary_detail, dependent: :destroy
 
   validates_uniqueness_of :name
   validates_presence_of :name, :hours
