@@ -1,5 +1,5 @@
 class Api::ProfessorsController < Api::BaseController
-  before_action :set_professor, only: [:create, :show, :update, :destroy]
+  before_action :set_professor, only: [:create, :show, :update, :destroy, :export_professor_data]
 
   def create
     @professor.save!
@@ -23,6 +23,7 @@ class Api::ProfessorsController < Api::BaseController
   def destroy
     @professor.destroy!
   end
+
   def import_csv
     # Leer el archivo CSV enviado por el cliente
     file = params[:file]
@@ -58,7 +59,19 @@ class Api::ProfessorsController < Api::BaseController
     # Devolver una respuesta exitosa al cliente
     render json: { message: 'Importación exitosa de estudiantes desde archivo CSV' }, status: :ok
   end
+
+  def export_professor_data
+    result = Exports::PersonSheetGeneratorServices.call(@professor)
+
+    send_data(
+      result[:data_stream],
+      filename: result[:filename],
+      disposition: 'attachment',
+    )
+  end
+
   private
+
   def set_professor
     @professor = if params[:id]
       Professor.includes(:person, professor_careers: :career).find(params[:id])

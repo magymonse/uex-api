@@ -30,4 +30,8 @@ class Activity < ApplicationRecord
         )
     end
   end
+
+  def date_formatted
+    "#{start_date} - #{end_date}"
+  end
 end

@@ -1,5 +1,5 @@
 class Api::StudentsController < Api::BaseController
-  before_action :set_student, only: [:create, :show, :update, :destroy]
+  before_action :set_student, only: [:create, :show, :update, :destroy, :export_student_data]
 
   def create
     @student.save!
@@ -57,6 +57,16 @@ class Api::StudentsController < Api::BaseController
 
     # Devolver una respuesta exitosa al cliente
     render json: { message: 'Importación exitosa de estudiantes desde archivo CSV' }, status: :ok
+  end
+
+  def export_student_data
+    result = Exports::PersonSheetGeneratorServices.call(@student)
+
+    send_data(
+      result[:data_stream],
+      filename: result[:filename],
+      disposition: 'attachment',
+    )
   end
 
   private
