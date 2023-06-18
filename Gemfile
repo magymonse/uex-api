@@ -46,6 +46,9 @@ gem 'active_model_serializers'
 # Provide configurable, manageable, and safe stateful sessions based on JSON Web Tokens.
 gem "jwt_sessions"
 
+# Axlsx is an Office Open XML Spreadsheet generator for the Ruby programming language
+gem 'caxlsx'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]

@@ -10,4 +10,8 @@ class ActivityWeek < ApplicationRecord
     scope = where(activity_id: params[:activity_id]) if params[:activity_id]
     scope
   end
+
+  def date_formatted
+    "#{start_date} - #{end_date}"
+  end
 end

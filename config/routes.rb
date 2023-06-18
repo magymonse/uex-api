@@ -9,11 +9,19 @@ Rails.application.routes.draw do
     resources :careers, only: [:create, :update, :show, :index, :destroy]
     resources :organizations, only: [:create, :update, :show, :index, :destroy]
     resources :students, only: [:create, :update, :show, :index, :destroy] do
+      member do
+        get :export_student_data, format: :xlsx
+      end
+
       collection do
         post :import_csv
       end
     end
-    resources :professors, only: [:create, :update, :delete, :show, :index, :destroy]do
+    resources :professors, only: [:create, :update, :delete, :show, :index, :destroy ]do
+      member do
+        get :export_professor_data, format: :xlsx
+      end
+
       collection do
         post :import_csv
       end

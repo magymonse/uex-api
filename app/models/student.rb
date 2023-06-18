@@ -3,6 +3,9 @@ class Student < ApplicationRecord
 
   belongs_to :person, dependent: :destroy
   belongs_to :career
+  has_many :activity_week_participants, as: :participable
+
+  delegate :name, to: :career, prefix: true
 
   validates_presence_of :hours, :career
 
@@ -15,5 +18,9 @@ class Student < ApplicationRecord
       scope = scope.where(career_id: params[:career_id]) if params[:career_id].present?
       scope
     end
+  end
+
+  def career_formatter
+    career_name
   end
 end
