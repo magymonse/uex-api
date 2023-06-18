@@ -49,7 +49,11 @@ gem "jwt_sessions"
 # A library for bulk insertion of data into your database using ActiveRecord [https://github.com/zdennis/activerecord-import]
 gem "activerecord-import", "~> 1.4"
 
+# Repository for collecting Locale data for Ruby on Rails I18 [https://github.com/svenfuchs/rails-i18n]
 gem "rails-i18n", "~> 7.0.0"
+
+# Axlsx is an Office Open XML Spreadsheet generator for the Ruby programming language
+gem 'caxlsx'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -66,4 +70,3 @@ group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
 end
-
