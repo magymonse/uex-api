@@ -1,4 +1,5 @@
 class Api::BaseController < ApplicationController
+  before_action :authorize_access_request!
 
   MAX_PER_PAGE = 100
   DEFAULT_PER_PAGE = 10
