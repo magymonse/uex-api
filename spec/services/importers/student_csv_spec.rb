@@ -1,5 +1,5 @@
 require "rails_helper"
-require Rails.root.join("app/services/importers/student_csv")
+require Rails.root.join("app/services/imports/student_csv")
 
 RSpec.describe StudentCSV do
   describe "#import" do

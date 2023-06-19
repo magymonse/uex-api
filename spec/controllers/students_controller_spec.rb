@@ -12,7 +12,7 @@ RSpec.describe Api::StudentsController, type: :controller do
     end
 
     it "returns result message" do
-      expect(JSON.parse(response.body)["message"]).to eq("Se importaron 1 registros. Filas no importadas:  Fila 2 => Carrera debe existir")
+      expect(JSON.parse(response.body)["message"]).to eq("Se importaron 1 registros. Filas no importadas:  Fila 2 => Carrera debe existir y Carrera no puede estar en blanco")
     end
 
     it "returns a success response" do
