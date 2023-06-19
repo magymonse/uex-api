@@ -86,5 +86,26 @@ RSpec.describe StudentCSV do
         expect(@student_csv.import_result_msg).to eq("No se pudo importar ningún registro. No se encontraron las columnas: last_name en el archivo indicado")
       end
     end
+
+    context "when raise RuntimeError into import_students" do
+      before do
+        csv_file_path = Rails.root.join("spec/support/files/valid_students.csv")
+        @student_csv = StudentCSV.new(csv_file_path)
+        allow(@student_csv).to receive(:import_students).and_raise(RuntimeError) # Force Exception when import students
+        @student_csv.import
+      end
+
+      it "not populate person" do
+        expect(Person.count).to eq(0)
+      end
+
+      it "not populate student" do
+        expect(Student.count).to eq(0)
+      end
+
+      it "import without errors" do
+        expect(@student_csv.import_result_msg).to eq("No se pudo importar ningún registro. Ocurrió un error al importar el archivo. Por favor, intente de nuevo")
+      end
+    end
   end
 end

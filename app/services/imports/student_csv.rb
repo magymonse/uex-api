@@ -9,18 +9,22 @@ class StudentCSV
     @persons = []
     @successful_import_count = 0
     @rows_errors = {}
-    @validation_errors = []
+    @errors = []
   end
 
   def import
     return unless valid?
 
-    import_persons
-    import_students
+    ActiveRecord::Base.transaction do
+      import_persons
+      import_students
+    end
+  rescue StandardError
+    @errors << I18n.t("services.importers.messages.unexpected_error")
   end
 
   def import_result_msg
-    return validation_errors_msg if @validation_errors.any?
+    return validation_errors_msg if @errors.any?
     result_msg
   end
 
@@ -91,14 +95,14 @@ class StudentCSV
   end
 
   def validation_errors_msg
-    msg = I18n.t("services.importers.import_fail")
-    msg << ". " +  @validation_errors.join(". ")
+    msg = I18n.t("services.importers.messages.import_fail")
+    msg << ". " +  @errors.join(". ")
     msg
   end
 
   def result_msg
-    msg = I18n.t("services.importers.imported_records", count: @successful_import_count)
-    msg << ". " + I18n.t("services.importers.no_imported_records", rows_errors: rows_errors) if @rows_errors.any?
+    msg = I18n.t("services.importers.messages.imported_records", count: @successful_import_count)
+    msg << ". " + I18n.t("services.importers.messages.no_imported_records", rows_errors: rows_errors) if @rows_errors.any?
     msg
   end
 
@@ -108,7 +112,7 @@ class StudentCSV
 
   def valid_file?
     if @csv_file_path.blank?
-      @validation_errors << I18n.t("services.importers.blank_csv_file")
+      @errors << I18n.t("services.importers.messages.blank_csv_file")
       return false
     end
     true
@@ -117,7 +121,7 @@ class StudentCSV
   def valid_columns?(received_columns)
     missing_columns = EXPECTED_COLUMNS - received_columns
     if missing_columns.any?
-      @validation_errors << I18n.t("services.importers.missing_columns", missing_columns: missing_columns.join(", "))
+      @errors << I18n.t("services.importers.messages.missing_columns", missing_columns: missing_columns.join(", "))
       return false
     end
     true
