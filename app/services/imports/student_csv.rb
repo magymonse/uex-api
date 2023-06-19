@@ -20,7 +20,7 @@ class StudentCSV
       import_students
     end
   rescue StandardError
-    @errors << I18n.t("services.importers.messages.unexpected_error")
+    @errors << I18n.t("services.imports.messages.unexpected_error")
   end
 
   def import_result_msg
@@ -91,18 +91,18 @@ class StudentCSV
   end
 
   def rows_errors
-    @rows_errors.map { |key, value| " #{I18n.t("services.importers.row")} #{key} => #{value}"}.join(", ")
+    @rows_errors.map { |key, value| " #{I18n.t("services.imports.row")} #{key} => #{value}"}.join(", ")
   end
 
   def validation_errors_msg
-    msg = I18n.t("services.importers.messages.import_fail")
+    msg = I18n.t("services.imports.messages.import_fail")
     msg << ". " +  @errors.join(". ")
     msg
   end
 
   def result_msg
-    msg = I18n.t("services.importers.messages.imported_records", count: @successful_import_count)
-    msg << ". " + I18n.t("services.importers.messages.no_imported_records", rows_errors: rows_errors) if @rows_errors.any?
+    msg = I18n.t("services.imports.messages.imported_records", count: @successful_import_count)
+    msg << ". " + I18n.t("services.imports.messages.no_imported_records", rows_errors: rows_errors) if @rows_errors.any?
     msg
   end
 
@@ -112,7 +112,7 @@ class StudentCSV
 
   def valid_file?
     if @csv_file_path.blank?
-      @errors << I18n.t("services.importers.messages.blank_csv_file")
+      @errors << I18n.t("services.imports.messages.blank_csv_file")
       return false
     end
     true
@@ -121,7 +121,7 @@ class StudentCSV
   def valid_columns?(received_columns)
     missing_columns = EXPECTED_COLUMNS - received_columns
     if missing_columns.any?
-      @errors << I18n.t("services.importers.messages.missing_columns", missing_columns: missing_columns.join(", "))
+      @errors << I18n.t("services.imports.messages.missing_columns", missing_columns: missing_columns.join(", "))
       return false
     end
     true

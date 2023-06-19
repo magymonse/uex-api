@@ -11,7 +11,7 @@ es:
       student:
         career: Carrera
   services:
-    importers:
+    imports:
       row: Fila
       messages:
         imported_records: Se importaron %{count} registros
