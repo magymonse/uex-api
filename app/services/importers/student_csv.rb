@@ -1,6 +1,8 @@
 require Rails.root.join("lib/utility")
 class StudentCSV
   EXPECTED_COLUMNS = %w[first_name last_name email phone_number id_card address career]
+  TRANSLATED_SEX = I18n.t("activerecord.attributes.person.sexes").invert.transform_keys(&:downcase)
+
   def initialize(csv_file_path)
     @csv_file_path = csv_file_path
     @students_careers = {}
@@ -34,7 +36,7 @@ class StudentCSV
       break unless valid_columns?(row.headers)
 
       career_id, id_card = get_values(careers, row)
-      person = Person.new(row.to_h.except("career"))
+      person = Person.new(build_person_attributes(row))
       if person.valid?
         persons << person
         @students_careers[id_card] = career_id
@@ -53,6 +55,12 @@ class StudentCSV
     career = Utility.clean_string(row["career"])
     career_id = careers[career]
     return career_id, id_card
+  end
+
+  def build_person_attributes(row)
+    person_attributes = row.to_h.except("career", "sex")
+    person_attributes["sex"] = TRANSLATED_SEX[Utility.clean_string(row["sex"])]
+    person_attributes
   end
 
   def import_students

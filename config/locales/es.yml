@@ -5,6 +5,9 @@ es:
     attributes:
       person:
         email: Correo
+        sexes:
+          male: Masculino
+          female: Femenino
       student:
         career: Carrera
   services:

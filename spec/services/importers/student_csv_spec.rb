@@ -13,7 +13,11 @@ RSpec.describe StudentCSV do
         @student_csv.import
       end
 
-      it "populate database" do
+      it "populate person" do
+        expect(Person.count).to eq(2)
+      end
+
+      it "populate student" do
         expect(Student.count).to eq(2)
       end
 
@@ -31,12 +35,16 @@ RSpec.describe StudentCSV do
         @student_csv.import
       end
 
-      it "not populate database" do
+      it "not populate person" do
+        expect(Person.count).to eq(0)
+      end
+
+      it "not populate student" do
         expect(Student.count).to eq(0)
       end
 
       it "import without errors" do
-        expect(@student_csv.import_result_msg).to eq("Se importaron 0 registros. Filas no importadas:  Fila 2 => Correo no puede estar en blanco y Correo no es válido,  Fila 1 => Carrera debe existir")
+        expect(@student_csv.import_result_msg).to eq("Se importaron 0 registros. Filas no importadas:  Fila 2 => Correo no puede estar en blanco y Correo no es válido,  Fila 1 => Carrera debe existir y Carrera no puede estar en blanco")
       end
     end
 
@@ -46,7 +54,11 @@ RSpec.describe StudentCSV do
         @student_csv.import
       end
 
-      it "not populate database" do
+      it "not populate person" do
+        expect(Person.count).to eq(0)
+      end
+
+      it "not populate student" do
         expect(Student.count).to eq(0)
       end
 
@@ -62,7 +74,11 @@ RSpec.describe StudentCSV do
         @student_csv.import
       end
 
-      it "not populate database" do
+      it "not populate person" do
+        expect(Person.count).to eq(0)
+      end
+
+      it "not populate student" do
         expect(Student.count).to eq(0)
       end
 
