@@ -7,7 +7,7 @@ class Student < ApplicationRecord
 
   delegate :name, to: :career, prefix: true
 
-  validates_presence_of :hours, :career
+  validates_presence_of :hours, :career, :admission_year
 
   accepts_nested_attributes_for :person
 
