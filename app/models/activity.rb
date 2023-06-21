@@ -1,8 +1,8 @@
 class Activity < ApplicationRecord
   belongs_to :activity_type
   belongs_to :professor
-  belongs_to :organizing_organization, class_name: 'Organization', foreign_key: 'organizing_organization_id'
-  belongs_to :partner_organization, class_name: 'Organization', foreign_key: 'partner_organization_id'
+  belongs_to :organizing_organization, class_name: 'Organization', foreign_key: 'organizing_organization_id', optional: true
+  belongs_to :partner_organization, class_name: 'Organization', foreign_key: 'partner_organization_id', optional: true
   has_many :activity_careers, dependent: :destroy
   has_many :careers, through: :activity_careers
   has_many :activity_weeks, dependent: :destroy
@@ -11,6 +11,7 @@ class Activity < ApplicationRecord
   validates_uniqueness_of :name
   validates_presence_of :name, :hours
 
+  accepts_nested_attributes_for :activity_weeks
   accepts_nested_attributes_for :activity_careers, allow_destroy: true
   accepts_nested_attributes_for :beneficiary_detail, allow_destroy: true
 

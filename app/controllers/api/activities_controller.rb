@@ -1,9 +1,10 @@
 class Api::ActivitiesController < Api::BaseController
-  before_action :set_activity, only: [:create, :show, :update, :destroy]
+  before_action :set_activity, only: [:show, :update, :destroy]
 
   def create
-    @activity.save!
-    render json: @activity
+    result = CreateActivityServices.call(activity_params)
+
+    render json: result[:record]
   end
 
   def index
@@ -28,8 +29,6 @@ class Api::ActivitiesController < Api::BaseController
   def set_activity
     @activity = if params[:id]
       Activity.includes(includes).find(params[:id])
-    else
-      Activity.new(activity_params)
     end
   end
 
