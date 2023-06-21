@@ -1,5 +1,5 @@
 require Rails.root.join("lib/utility")
-class StudentCSV
+class Imports::StudentCsv
   EXPECTED_COLUMNS = %w[first_name last_name email phone_number id_card address career]
   TRANSLATED_SEX = I18n.t("activerecord.attributes.person.sexes").invert.transform_keys(&:downcase)
 

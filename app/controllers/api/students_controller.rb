@@ -1,5 +1,3 @@
-require Rails.root.join("app/services/imports/student_csv")
-
 class Api::StudentsController < Api::BaseController
   before_action :set_student, only: [:create, :show, :update, :destroy, :export_student_data]
 
@@ -27,7 +25,7 @@ class Api::StudentsController < Api::BaseController
   end
 
   def import_csv
-    student_csv = StudentCSV.new(params[:file])
+    student_csv = Imports::StudentCsv.new(params[:file])
     student_csv.import
     render json: { message: student_csv.import_result_msg }, status: :ok
   end

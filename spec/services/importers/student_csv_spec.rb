@@ -1,7 +1,6 @@
 require "rails_helper"
-require Rails.root.join("app/services/imports/student_csv")
 
-RSpec.describe StudentCSV do
+RSpec.describe Imports::StudentCsv do
   describe "#import" do
     context "with valid csv content" do
       before do
@@ -9,7 +8,7 @@ RSpec.describe StudentCSV do
         FactoryBot.create(:career, name: "Ingenieria Civil")
 
         csv_file_path = Rails.root.join("spec/support/files/valid_students.csv")
-        @student_csv = StudentCSV.new(csv_file_path)
+        @student_csv = Imports::StudentCsv.new(csv_file_path)
         @student_csv.import
       end
 
@@ -31,7 +30,7 @@ RSpec.describe StudentCSV do
         FactoryBot.create(:career, name: "Ingenieria Civil")
 
         csv_file_path = Rails.root.join("spec/support/files/invalid_students.csv")
-        @student_csv = StudentCSV.new(csv_file_path)
+        @student_csv = Imports::StudentCsv.new(csv_file_path)
         @student_csv.import
       end
 
@@ -50,7 +49,7 @@ RSpec.describe StudentCSV do
 
     context "without file" do
       before do
-        @student_csv = StudentCSV.new(nil)
+        @student_csv = Imports::StudentCsv.new(nil)
         @student_csv.import
       end
 
@@ -70,7 +69,7 @@ RSpec.describe StudentCSV do
     context "with invalid csv columns" do
       before do
         csv_file_path = Rails.root.join("spec/support/files/invalid_students_columns.csv")
-        @student_csv = StudentCSV.new(csv_file_path)
+        @student_csv = Imports::StudentCsv.new(csv_file_path)
         @student_csv.import
       end
 
@@ -90,7 +89,7 @@ RSpec.describe StudentCSV do
     context "when raise RuntimeError into import_students" do
       before do
         csv_file_path = Rails.root.join("spec/support/files/valid_students.csv")
-        @student_csv = StudentCSV.new(csv_file_path)
+        @student_csv = Imports::StudentCsv.new(csv_file_path)
         allow(@student_csv).to receive(:import_students).and_raise(RuntimeError) # Force Exception when import students
         @student_csv.import
       end
