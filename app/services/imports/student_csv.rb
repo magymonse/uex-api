@@ -16,8 +16,7 @@ class Imports::StudentCsv
     return unless valid?
 
     ActiveRecord::Base.transaction do
-      import_persons
-      import_students
+      _import
     end
   rescue StandardError
     @errors << I18n.t("services.imports.messages.unexpected_error")
@@ -30,64 +29,50 @@ class Imports::StudentCsv
 
   private
 
-  def import_persons
+  def _import
     persons = []
-    careers = Career.pluck(:name, :id).to_h
-    careers = careers.transform_keys{ |key| Utility.clean_string(key) }
-    index = 1
+    index = 0
 
     CSV.foreach(@csv_file_path, headers: true) do |row|
       break unless valid_columns?(row.headers)
+      index += 1
 
-      career_id, id_card = get_values(careers, row)
-      person = Person.new(build_person_attributes(row))
+      person = Person.new(person_attributes(row))
+      person.build_student(career_id: career_id(row))
+
+      unless person.student.valid?
+        @rows_errors[index] = person.student.errors.full_messages.to_sentence
+        next
+      end
+
       if person.valid?
         persons << person
-        @students_careers[id_card] = career_id
       else
         @rows_errors[index] = person.errors.full_messages.to_sentence
       end
-      index += 1
     end
 
-    import_result = Person.import(persons, validate: false)
-    @persons = Person.where(id: import_result.ids).pluck(:id_card, :id).to_h
-  end
-
-  def get_values(careers, row)
-    id_card = row["id_card"]
-    career = Utility.clean_string(row["career"])
-    career_id = careers[career]
-    return career_id, id_card
-  end
-
-  def build_person_attributes(row)
-    person_attributes = row.to_h.except("career", "sex")
-    person_attributes["sex"] = TRANSLATED_SEX[Utility.clean_string(row["sex"])]
-    person_attributes
-  end
-
-  def import_students
-    students = []
-    persons_to_delete = []
-    index = 1
-
-    @students_careers.each do |id_card, career_id|
-      person_id = @persons[id_card]
-      student = Student.new(person_id: person_id, career_id: career_id)
-      if student.valid?
-        students << student
-      else
-        # Save related person to delete because can't exist person without related student
-        persons_to_delete.push(person_id)
-        @rows_errors[index] = student.errors.full_messages.to_sentence
-      end
-      index += 1
-    end
-
-    Person.where(id: persons_to_delete).delete_all
-    import_result = Student.import(students, validate: false)
+    import_result = Person.import(persons, validate: false, recursive: true)
     @successful_import_count = import_result.ids.size
+  end
+
+  def careers
+    @_careers ||=
+      begin
+        careers = Career.pluck(:name, :id).to_h
+        careers.transform_keys { |key| Utility.clean_string(key) }
+      end
+  end
+
+  def career_id(row)
+    career = Utility.clean_string(row["career"])
+    careers[career]
+  end
+
+  def person_attributes(row)
+    attrs = row.to_h.except("career", "sex")
+    attrs["sex"] = TRANSLATED_SEX[Utility.clean_string(row["sex"])]
+    attrs
   end
 
   def rows_errors

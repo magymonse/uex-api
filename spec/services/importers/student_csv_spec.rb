@@ -43,7 +43,7 @@ RSpec.describe Imports::StudentCsv do
       end
 
       it "import without errors" do
-        expect(@student_csv.import_result_msg).to eq("Se importaron 0 registros. Filas no importadas:  Fila 2 => Correo no puede estar en blanco y Correo no es válido,  Fila 1 => Carrera debe existir y Carrera no puede estar en blanco")
+        expect(@student_csv.import_result_msg).to eq("Se importaron 0 registros. Filas no importadas:  Fila 1 => Carrera debe existir y Carrera no puede estar en blanco,  Fila 2 => Correo no puede estar en blanco y Correo no es válido")
       end
     end
 
@@ -86,11 +86,11 @@ RSpec.describe Imports::StudentCsv do
       end
     end
 
-    context "when raise RuntimeError into import_students" do
+    context "when raise RuntimeError into _import" do
       before do
         csv_file_path = Rails.root.join("spec/support/files/valid_students.csv")
         @student_csv = Imports::StudentCsv.new(csv_file_path)
-        allow(@student_csv).to receive(:import_students).and_raise(RuntimeError) # Force Exception when import students
+        allow(@student_csv).to receive(:_import).and_raise(RuntimeError) # Force Exception when import
         @student_csv.import
       end
 
