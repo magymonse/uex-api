@@ -25,38 +25,9 @@ class Api::StudentsController < Api::BaseController
   end
 
   def import_csv
-    # Leer el archivo CSV enviado por el cliente
-    file = params[:file]
-    spreadsheet = Roo::CSV.new(file.path)
-
-    # Procesar los datos del archivo CSV
-    spreadsheet.each_with_index do |row, index|
-      next if index.zero? # Ignorar la primera fila (encabezados)
-
-      # Crear un nuevo estudiante a partir de los datos del archivo CSV
-      person = Person.new(
-        first_name: row[0],
-        last_name: row[1],
-        email: row[2],
-        phone_number: row[3],
-        id_card: row[4],
-        address: row[5]
-      )
-      student= Student.new(person: person)
-
-      # Asignar la carrera del estudiante si se especificó en el archivo CSV
-      career_name = row[6]
-      career = Career.find_by(name: career_name)
-      student.career = career if career
-
-      # Guardar el estudiante en la base de datos
-      unless student.save
-        render json: { error: "Error al importar el estudiante en la fila #{index + 1}: #{student.errors.full_messages.join(', ')}" }, status: :unprocessable_entity and return
-      end
-    end
-
-    # Devolver una respuesta exitosa al cliente
-    render json: { message: 'Importación exitosa de estudiantes desde archivo CSV' }, status: :ok
+    student_csv = Imports::StudentCsv.new(params[:file])
+    student_csv.import
+    render json: { message: student_csv.import_result_msg }, status: :ok
   end
 
   def export_student_data
