@@ -33,3 +33,6 @@
 
 .generators
 .rakeTasks
+
+# Ignore test folder
+test
