@@ -15,7 +15,7 @@ class Imports::PersonCsv
       index += 1
 
       person = Person.new(person_attributes(row))
-      yield(person, career_id(row))
+      yield(person, career_ids(row))
 
       if person.errors.empty? && person.valid?
         @persons << person
@@ -44,9 +44,9 @@ class Imports::PersonCsv
       end
   end
 
-  def career_id(row)
-    career = Utility.clean_string(row["career"])
-    careers[career]
+  def career_ids(row)
+    career_names = Utility.clean_string(row["career"])
+    career_names.split(",").map {|career_name| careers[career_name]}.compact
   end
 
   def person_attributes(row)

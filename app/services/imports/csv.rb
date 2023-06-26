@@ -1,4 +1,3 @@
-require Rails.root.join("lib/utility")
 # Esta clase se encarga de:
 # - Validar que se reciba un archivo csv
 # - Iterar sobre las líneas del archivo
