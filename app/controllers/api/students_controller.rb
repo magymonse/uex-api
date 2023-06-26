@@ -26,8 +26,8 @@ class Api::StudentsController < Api::BaseController
 
   def import_csv
     student_csv = Imports::StudentCsv.new(params[:file])
-    student_csv.import
-    render json: { message: student_csv.import_result_msg }, status: :ok
+    result = student_csv.import
+    render json: { message: result }, status: :ok
   end
 
   def export_student_data
