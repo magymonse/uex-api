@@ -10,6 +10,9 @@ es:
           female: Femenino
       student:
         career: Carrera
+    errors:
+      messages:
+        invalid_status_flow: 'No se puede cambiar el estado de %{status_was} a %{status}'
   services:
     imports:
       row: Fila

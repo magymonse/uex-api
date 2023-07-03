@@ -1,5 +1,5 @@
 class Api::ActivitiesController < Api::BaseController
-  before_action :set_activity, only: [:show, :update, :destroy]
+  before_action :set_activity, only: [:show, :update, :destroy, :update_status]
 
   def create
     result = CreateActivityServices.call(activity_params)
@@ -25,6 +25,12 @@ class Api::ActivitiesController < Api::BaseController
     @activity.destroy!
   end
 
+  def update_status
+    result = Models::ActivityStatusServices.call(@activity, params)
+
+    render json: result
+  end
+
   private
   def set_activity
     @activity = if params[:id]
@@ -35,7 +41,7 @@ class Api::ActivitiesController < Api::BaseController
   # Currently this method is also used in the index serializer we should create a different includes method to preload data on index actions
   # and pass as well to the serializer so that it doesn't try to load unnecesary data only if it's specified
   def includes
-    [ :activity_type, :organizing_organization, :partner_organization, :activity_careers, :beneficiary_detail, {professor: :person} ]
+    [ :activity_type, :organizing_organization, :partner_organization, :activity_careers, :careers, :beneficiary_detail, {professor: :person} ]
   end
 
   def activity_params
