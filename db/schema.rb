@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_12_020124) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_28_071726) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "activities", force: :cascade do |t|
     t.string "name"
-    t.string "status"
+    t.integer "status"
     t.string "address"
     t.boolean "virtual_participation"
     t.bigint "professor_id", null: false
@@ -32,6 +32,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_12_020124) do
     t.date "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "evaluation"
+    t.date "approved_at"
+    t.string "resolution_number"
     t.index ["activity_type_id"], name: "index_activities_on_activity_type_id"
     t.index ["organizing_organization_id"], name: "index_activities_on_organizing_organization_id"
     t.index ["partner_organization_id"], name: "index_activities_on_partner_organization_id"
@@ -134,7 +137,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_12_020124) do
     t.bigint "person_id", null: false
     t.integer "hours", default: 0
     t.boolean "submitted"
-    t.date "admission_year"
+    t.string "admission_year"
     t.bigint "career_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

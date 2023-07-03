@@ -17,7 +17,7 @@ Rails.application.routes.draw do
         post :import_csv
       end
     end
-    resources :professors, only: [:create, :update, :delete, :show, :index, :destroy ]do
+    resources :professors, only: [:create, :update, :show, :index, :destroy ]do
       member do
         get :export_professor_data, format: :xlsx
       end
@@ -26,7 +26,11 @@ Rails.application.routes.draw do
         post :import_csv
       end
     end
-    resources :activities, only: [:create, :update, :show, :index, :destroy]
+    resources :activities, only: [:create, :update, :show, :index, :destroy] do
+      member do
+        put :update_status
+      end
+    end
     resources :activity_weeks, only: [:create, :update, :show, :index, :destroy]
     resources :activity_week_participants, only: [:create, :update, :show, :index, :destroy]
   end
