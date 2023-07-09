@@ -41,19 +41,69 @@ class Api::ActivitiesController < Api::BaseController
   # Currently this method is also used in the index serializer we should create a different includes method to preload data on index actions
   # and pass as well to the serializer so that it doesn't try to load unnecesary data only if it's specified
   def includes
-    [ :activity_type, :organizing_organization, :partner_organization, :activity_careers, :careers, :beneficiary_detail, {professor: :person} ]
+    [ :activities_activity_sub_types, :activity_sub_types, :organizing_organization, :partner_organization, :activity_careers, :careers, :beneficiary_detail, {professor: :person} ]
   end
 
   def activity_params
     params[:activity][:activity_careers_attributes] = params[:activity].delete(:activity_careers)
     params[:activity][:beneficiary_detail_attributes] = params[:activity].delete(:beneficiary_detail)
+    params[:activity][:activities_activity_sub_types_attributes] = params[:activity].delete(:activities_activity_sub_types)
 
-    params.require(:activity).permit(:id, :name, :activity_type_id, :status, :address, :virtual_participation,
+    params.require(:activity).permit(:id, :name, :status, :address, :virtual_participation,
       :organizing_organization_id, :partner_organization_id, :project_link, :hours, :ods_vinculation,
       :institutional_program, :institutional_extension_line, :start_date, :end_date, :professor_id,
       beneficiary_detail_attributes: [:id, :activity_id, :number_of_men, :number_of_women, :total],
       activity_careers_attributes: [:id, :career_id, :_destroy],
+      activities_activity_sub_types_attributes: [:id, :activity_sub_type_id, :_destroy],
       activity_weeks_attributes: [:id, :start_date, :end_date]
     )
+  end
+end
+
+require 'uri'
+require 'net/http'
+require 'json'
+
+class EasyBrokerApi
+  API_ENDPOINT = "https://api.stagingeb.com/v1"
+
+  def initialize(auth_key)
+    @auth_key = auth_key
+  end
+
+  def contact_requests(params)
+    response = get_request(:contact_requests, params)
+
+    response
+  end
+
+  def get_request(endpoint, params)
+    url = build_url(endpoint, params)
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+    request = Net::HTTP::Get.new(url)
+
+    response = http.request(request)
+
+    if response.is_a?(Net::HTTPSuccess)
+      JSON.parse(response.read_body.force_encoding("UTF-8"))
+    elsif response.is_a?(Net::HTTPUnauthorized)
+      raise JSON.parse(response.read_body.force_encoding("UTF-8"))["error"]
+    end
+  end
+
+  def build_url(endpoint, params)
+    resource = "#{API_ENDPOINT}/#{endpoint}"
+    url = URI(resource)
+    url.query = URI.encode_www_form(params) if params
+
+    url
+  end
+
+  def headers
+    {
+      "accept" => 'application/json',
+      "X-Authorization" => @auth_key
+    }
   end
 end
