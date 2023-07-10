@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_28_071726) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_06_130906) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -35,6 +35,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_28_071726) do
     t.integer "evaluation"
     t.date "approved_at"
     t.string "resolution_number"
+    t.text "objective"
     t.index ["activity_type_id"], name: "index_activities_on_activity_type_id"
     t.index ["organizing_organization_id"], name: "index_activities_on_organizing_organization_id"
     t.index ["partner_organization_id"], name: "index_activities_on_partner_organization_id"

@@ -50,7 +50,7 @@ class Api::ActivitiesController < Api::BaseController
 
     params.require(:activity).permit(:id, :name, :activity_type_id, :status, :address, :virtual_participation,
       :organizing_organization_id, :partner_organization_id, :project_link, :hours, :ods_vinculation,
-      :institutional_program, :institutional_extension_line, :start_date, :end_date, :professor_id,
+      :institutional_program, :institutional_extension_line, :start_date, :end_date, :objective, :professor_id,
       beneficiary_detail_attributes: [:id, :activity_id, :number_of_men, :number_of_women, :total],
       activity_careers_attributes: [:id, :career_id, :_destroy],
       activity_weeks_attributes: [:id, :start_date, :end_date]
