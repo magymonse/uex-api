@@ -33,6 +33,7 @@ Rails.application.routes.draw do
     end
     resources :activity_weeks, only: [:create, :update, :show, :index, :destroy]
     resources :activity_week_participants, only: [:create, :update, :show, :index, :destroy]
+    resources :activity_sub_types, only: [:index]
   end
 
   post "refresh", controller: :refresh, action: :create
