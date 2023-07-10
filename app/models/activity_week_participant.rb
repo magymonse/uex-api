@@ -1,9 +1,10 @@
 class ActivityWeekParticipant < ApplicationRecord
   belongs_to :activity_week
+  belongs_to :activity_sub_type
   belongs_to :participable, polymorphic: true
   validates_presence_of :participable_id, :participable_type
 
-  validates_uniqueness_of :participable_id, scope: [:activity_week_id, :participable_type]
+  validates_uniqueness_of :participable_id, scope: [:activity_week_id, :participable_type, :activity_sub_type]
 
   class << self
     def search(params)
