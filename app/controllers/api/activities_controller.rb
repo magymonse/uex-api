@@ -30,6 +30,15 @@ class Api::ActivitiesController < Api::BaseController
 
     render json: result
   end
+  def export_project_list_report
+    result = Exports::ProjectListReportGeneratorServices.call(params)
+
+    send_data(
+      result[:data_stream],
+      filename: result[:filename],
+      disposition: 'attachment',
+    )
+  end
 
   private
   def set_activity
