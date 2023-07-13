@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_07_090240) do
-  # These are extensions that must be enabled in order to support this database
+ActiveRecord::Schema[7.0].define(version: 2023_07_07_090240) do be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "activities", force: :cascade do |t|
@@ -34,6 +33,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_07_090240) do
     t.integer "evaluation"
     t.date "approved_at"
     t.string "resolution_number"
+    t.text "objective"
     t.index ["organizing_organization_id"], name: "index_activities_on_organizing_organization_id"
     t.index ["partner_organization_id"], name: "index_activities_on_partner_organization_id"
     t.index ["professor_id"], name: "index_activities_on_professor_id"

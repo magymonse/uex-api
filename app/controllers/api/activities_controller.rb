@@ -30,6 +30,15 @@ class Api::ActivitiesController < Api::BaseController
 
     render json: result
   end
+  def export_project_list_report
+    result = Exports::ProjectListReportGeneratorServices.call(params)
+
+    send_data(
+      result[:data_stream],
+      filename: result[:filename],
+      disposition: 'attachment',
+    )
+  end
 
   private
   def set_activity
@@ -51,7 +60,7 @@ class Api::ActivitiesController < Api::BaseController
 
     params.require(:activity).permit(:id, :name, :status, :address, :virtual_participation,
       :organizing_organization_id, :partner_organization_id, :project_link, :hours, :ods_vinculation,
-      :institutional_program, :institutional_extension_line, :start_date, :end_date, :professor_id,
+      :institutional_program, :institutional_extension_line, :start_date, :end_date, :objective, :professor_id,
       beneficiary_detail_attributes: [:id, :activity_id, :number_of_men, :number_of_women, :total],
       activity_careers_attributes: [:id, :career_id, :_destroy],
       activities_activity_sub_types_attributes: [:id, :activity_sub_type_id, :_destroy],

@@ -30,6 +30,10 @@ Rails.application.routes.draw do
       member do
         put :update_status
       end
+      collection do
+        get :export_project_list_report, format: :xlsx
+        get :export_statistical_report, format: :xlsx
+      end
     end
     resources :activity_weeks, only: [:create, :update, :show, :index, :destroy]
     resources :activity_week_participants, only: [:create, :update, :show, :index, :destroy]
