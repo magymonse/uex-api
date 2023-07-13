@@ -10,4 +10,11 @@ class ActivitySerializer < ActiveModel::Serializer
   has_many :activity_careers
   has_many :activities_activity_sub_types
   has_many :activity_sub_types
+
+  def start_date
+    I18n.l(object.start_date, format: :default)
+  end
+  def end_date
+    I18n.l(object.end_date, format: :default)
+  end
 end
