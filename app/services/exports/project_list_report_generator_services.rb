@@ -1,5 +1,4 @@
 class Exports::ProjectListReportGeneratorServices < ApplicationService
-  ALLOWED_ENTITY_TYPES = [Professor, Student]
 
   def initialize(params)
     @start_date = params[:approved_at_start].to_date
