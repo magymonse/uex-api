@@ -1,8 +1,9 @@
 class Exports::ProjectListReportGeneratorServices < ApplicationService
 
   def initialize(params)
-    @start_date = params[:approved_at_start].to_date
-    @end_date = params[:approved_at_end].to_date
+    @start_date = params[:approved_at_start]&.to_date
+    @end_date = params[:approved_at_end]&.to_date
+
   end
   def call
     super
