@@ -1,4 +1,4 @@
-class Models::SumActivityHoursToStudents < ApplicationService
+class Models::RemoveStudentHoursParticipation < ApplicationService
 
   def initialize(activity_week_participants)
     @activity_week_participants = activity_week_participants
@@ -17,25 +17,23 @@ class Models::SumActivityHoursToStudents < ApplicationService
 
   def register_hours!
     students_to_update = []
-    participants_to_update = []
  
     ActivityWeekParticipant.transaction do
       student_participants.each do |participant|
-        next if participant._destroy || participant.hours == participant.registered_hours
+        next if !participant._destroy
 
         student = students[participant.participable_id]
         next unless student
 
-        student.hours -= participant.registered_hours if participant.registered_hours
-        student.hours += participant.hours
-        students_to_update << student
+        if participant.registered_hours
+          new_hours = student.hours - participant.registered_hours
+          Student.update_hours(student, new_hours)
+        end
 
-        participant.registered_hours = participant.hours
-        participants_to_update << participant
+        students_to_update << student
       end
 
-      Student.import!(students_to_update.uniq, on_duplicate_key_update: [:hours])
-      ActivityWeekParticipant.import!(participants_to_update.uniq, on_duplicate_key_update: [:registered_hours])
+      Student.import!(students_to_update.uniq, on_duplicate_key_update: [:hours, :status])
     end
 
     @activity_week_participants

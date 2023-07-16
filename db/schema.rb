@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_10_185904) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_16_060119) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -34,6 +34,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_10_185904) do
     t.integer "evaluation"
     t.date "approved_at"
     t.string "resolution_number"
+    t.text "objective"
     t.index ["organizing_organization_id"], name: "index_activities_on_organizing_organization_id"
     t.index ["partner_organization_id"], name: "index_activities_on_partner_organization_id"
     t.index ["professor_id"], name: "index_activities_on_professor_id"
@@ -157,10 +158,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_10_185904) do
     t.bigint "person_id", null: false
     t.integer "hours", default: 0
     t.boolean "submitted"
-    t.date "admission_year"
+    t.string "admission_year"
     t.bigint "career_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "status", default: 0
     t.index ["career_id"], name: "index_students_on_career_id"
     t.index ["person_id"], name: "index_students_on_person_id"
   end

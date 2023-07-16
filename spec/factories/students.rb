@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory(:student) do
     hours { 0 }
+    status { :insuficient }
     admission_year { "2015" }
     submitted { false }
     person { 

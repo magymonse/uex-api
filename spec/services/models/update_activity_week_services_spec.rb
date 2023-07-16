@@ -71,19 +71,19 @@ describe Models::UpdateActivityWeekServices do
         end
 
         context "with updated participant attributes" do
-          it "should call SumActivityHoursToStudents" do
+          it "should call UpdateStudentHoursParticipation" do
             activity_week.assign_attributes(activity_week_participants_attributes: activity_week_participant_attributes)
             activity_week_participants = activity_week.activity_week_participants
     
-            expect(Models::SumActivityHoursToStudents).to receive(:call).with(activity_week_participants).and_call_original
+            expect(Models::UpdateStudentHoursParticipation).to receive(:call).with(activity_week_participants).and_call_original
     
             subject
             expect(student.reload.hours).to eq(activity_week_participant_attributes.first[:hours])
           end
     
-          context "when SumActivityHoursToStudents fails" do
+          context "when UpdateStudentHoursParticipation fails" do
             before do
-              allow_any_instance_of(Models::SumActivityHoursToStudents).to receive(:call).and_raise(RuntimeError)
+              allow_any_instance_of(Models::UpdateStudentHoursParticipation).to receive(:call).and_raise(RuntimeError)
             end
     
             it "should not save activity week" do
@@ -100,19 +100,19 @@ describe Models::UpdateActivityWeekServices do
             activity_week_participant_attributes.first[:_destroy] = true
           end
 
-          it "should call RestHoursAfterDeleteParticipantServices" do
+          it "should call RemoveStudentHoursParticipation" do
             activity_week.assign_attributes(activity_week_participants_attributes: activity_week_participant_attributes)
             activity_week_participants = activity_week.activity_week_participants
     
-            expect(Models::RestHoursAfterDeleteParticipantServices).to receive(:call).with(activity_week_participants).and_call_original
+            expect(Models::RemoveStudentHoursParticipation).to receive(:call).with(activity_week_participants).and_call_original
     
             subject
             expect { student.reload }.to change { student.hours }.by(-activity_week_participant.registered_hours)
           end
   
-          context "when RestHoursAfterDeleteParticipantServices fails" do
+          context "when RemoveStudentHoursParticipation fails" do
             before do
-              allow_any_instance_of(Models::RestHoursAfterDeleteParticipantServices).to receive(:call).and_raise(RuntimeError)
+              allow_any_instance_of(Models::RemoveStudentHoursParticipation).to receive(:call).and_raise(RuntimeError)
             end
   
             it "should not save activity week" do
@@ -133,8 +133,8 @@ describe Models::UpdateActivityWeekServices do
             activity_week.assign_attributes(activity_week_participants_attributes: activity_week_participant_attributes)
             activity_week_participants = activity_week.activity_week_participants
     
-            expect(Models::SumActivityHoursToStudents).to_not receive(:call)
-            expect(Models::RestHoursAfterDeleteParticipantServices).to_not receive(:call)
+            expect(Models::UpdateStudentHoursParticipation).to_not receive(:call)
+            expect(Models::RemoveStudentHoursParticipation).to_not receive(:call)
     
             subject
           end

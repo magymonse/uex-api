@@ -24,8 +24,8 @@ class Models::UpdateActivityWeekServices < ApplicationService
   private
 
   def perform_update_student_hours(activity_week_participants)
-    Models::SumActivityHoursToStudents.call(activity_week_participants)
-    Models::RestHoursAfterDeleteParticipantServices.call(activity_week_participants)
+    Models::UpdateStudentHoursParticipation.call(activity_week_participants)
+    Models::RemoveStudentHoursParticipation.call(activity_week_participants)
   end
 
   def validate_params!

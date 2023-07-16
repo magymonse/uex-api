@@ -1,4 +1,4 @@
-class Models::RestHoursAfterDeleteParticipantServices < ApplicationService
+class Models::UpdateStudentHoursParticipation < ApplicationService
 
   def initialize(activity_week_participants)
     @activity_week_participants = activity_week_participants
@@ -21,17 +21,24 @@ class Models::RestHoursAfterDeleteParticipantServices < ApplicationService
  
     ActivityWeekParticipant.transaction do
       student_participants.each do |participant|
-        next if !participant._destroy
+        next if participant._destroy || participant.hours == participant.registered_hours
 
         student = students[participant.participable_id]
         next unless student
 
-        student.hours -= participant.registered_hours if participant.registered_hours
+        new_hours = student.hours
+        new_hours -= participant.registered_hours if participant.registered_hours
+        new_hours += participant.hours
 
+        student.status = Student.update_hours(student, new_hours)
         students_to_update << student
+
+        participant.registered_hours = participant.hours
+        participants_to_update << participant
       end
 
-      Student.import!(students_to_update.uniq, on_duplicate_key_update: [:hours])
+      Student.import!(students_to_update.uniq, on_duplicate_key_update: [:hours, :status])
+      ActivityWeekParticipant.import!(participants_to_update.uniq, on_duplicate_key_update: [:registered_hours])
     end
 
     @activity_week_participants
