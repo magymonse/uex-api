@@ -158,7 +158,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_16_060119) do
     t.bigint "person_id", null: false
     t.integer "hours", default: 0
     t.boolean "submitted"
-    t.string "admission_year"
+    t.date "admission_year"
     t.bigint "career_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
