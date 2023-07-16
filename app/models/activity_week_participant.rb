@@ -6,6 +6,8 @@ class ActivityWeekParticipant < ApplicationRecord
 
   validates_uniqueness_of :participable_id, scope: [:activity_week_id, :participable_type, :activity_sub_type]
 
+  scope :with_students, -> { where(participable_type: Student) }
+
   class << self
     def search(params)
       scope = where({})

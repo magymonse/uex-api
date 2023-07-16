@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_07_090240) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_10_185904) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -83,6 +83,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_07_090240) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "activity_sub_type_id"
+    t.integer "registered_hours"
     t.index ["activity_sub_type_id"], name: "index_activity_week_participants_on_activity_sub_type_id"
     t.index ["activity_week_id"], name: "index_activity_week_participants_on_activity_week_id"
     t.index ["participable_type", "participable_id"], name: "index_activity_week_participants_on_participable"

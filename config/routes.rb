@@ -31,7 +31,11 @@ Rails.application.routes.draw do
         put :update_status
       end
     end
-    resources :activity_weeks, only: [:create, :update, :show, :index, :destroy]
+    resources :activity_weeks, only: [:create, :update, :show, :index, :destroy] do
+      member do
+        post :register_hours
+      end
+    end
     resources :activity_week_participants, only: [:create, :update, :show, :index, :destroy]
     resources :activity_sub_types, only: [:index]
   end
