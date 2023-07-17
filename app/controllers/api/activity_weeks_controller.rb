@@ -26,7 +26,7 @@ class Api::ActivityWeeksController < Api::BaseController
   end
 
   def register_hours
-    Models::SumActivityHoursToStudents.call(@activity_week.activity_week_participants)
+    Models::UpdateStudentHoursParticipation.call(@activity_week.activity_week_participants)
 
     render json: @activity_week
   end

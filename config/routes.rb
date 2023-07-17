@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     resources :students, only: [:create, :update, :show, :index, :destroy] do
       member do
         get :export_student_data, format: :xlsx
+        put :update_status
       end
 
       collection do

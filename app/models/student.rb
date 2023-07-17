@@ -25,6 +25,7 @@ class Student < ApplicationRecord
       scope = where({})
       scope = global_search(params[:search]) if params[:search].present?
       scope = scope.where(career_id: params[:career_id]) if params[:career_id].present?
+      scope = scope.where(status: params[:status]) if params[:status].present?
       scope
     end
 

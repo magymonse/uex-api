@@ -30,6 +30,7 @@ class Api::ActivitiesController < Api::BaseController
 
     render json: result
   end
+
   def export_project_list_report
     result = Exports::ProjectListReportGeneratorServices.call(params)
 
