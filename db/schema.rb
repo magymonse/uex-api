@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_07_090240) do be enabled in order to support this database
+ActiveRecord::Schema[7.0].define(version: 2023_07_16_060119) do
+  # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "activities", force: :cascade do |t|
@@ -83,6 +84,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_07_090240) do be enabled in or
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "activity_sub_type_id"
+    t.integer "registered_hours"
     t.index ["activity_sub_type_id"], name: "index_activity_week_participants_on_activity_sub_type_id"
     t.index ["activity_week_id"], name: "index_activity_week_participants_on_activity_week_id"
     t.index ["participable_type", "participable_id"], name: "index_activity_week_participants_on_participable"
@@ -160,6 +162,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_07_090240) do be enabled in or
     t.bigint "career_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "status", default: 0
     t.index ["career_id"], name: "index_students_on_career_id"
     t.index ["person_id"], name: "index_students_on_person_id"
   end

@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     resources :students, only: [:create, :update, :show, :index, :destroy] do
       member do
         get :export_student_data, format: :xlsx
+        put :update_status
       end
 
       collection do
@@ -35,7 +36,11 @@ Rails.application.routes.draw do
         get :export_statistical_report, format: :xlsx
       end
     end
-    resources :activity_weeks, only: [:create, :update, :show, :index, :destroy]
+    resources :activity_weeks, only: [:create, :update, :show, :index, :destroy] do
+      member do
+        post :register_hours
+      end
+    end
     resources :activity_week_participants, only: [:create, :update, :show, :index, :destroy]
     resources :activity_sub_types, only: [:index]
   end
