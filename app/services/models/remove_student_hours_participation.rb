@@ -26,8 +26,8 @@ class Models::RemoveStudentHoursParticipation < ApplicationService
         next unless student
 
         if participant.registered_hours
-          new_hours = student.hours - participant.registered_hours
-          Student.update_hours(student, new_hours)
+          student.hours = student.hours - participant.registered_hours
+          student.status = Student.eligible_status(student)
         end
 
         students_to_update << student

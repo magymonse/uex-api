@@ -13,9 +13,9 @@ class Models::UpdateActivityWeekServices < ApplicationService
   def update!
     ActivityWeek.transaction do
       @activity_week.assign_attributes(@activity_week_params)
-      perform_update_student_hours(@activity_week.activity_week_participants) if @activity_week.activity_week_participants.any? { |p| p.registered_hours }
-
+      Models::RemoveStudentHoursParticipation.call(@activity_week.activity_week_participants) if @activity_week.activity_week_participants.any? { |p| p.registered_hours }
       @activity_week.save!
+      perform_update_student_hours(@activity_week.activity_week_participants) if @activity_week.activity_week_participants.any? { |p| p.registered_hours }
     end
 
     @activity_week
@@ -25,7 +25,6 @@ class Models::UpdateActivityWeekServices < ApplicationService
 
   def perform_update_student_hours(activity_week_participants)
     Models::UpdateStudentHoursParticipation.call(activity_week_participants)
-    Models::RemoveStudentHoursParticipation.call(activity_week_participants)
   end
 
   def validate_params!
