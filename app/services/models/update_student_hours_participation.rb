@@ -26,14 +26,9 @@ class Models::UpdateStudentHoursParticipation < ApplicationService
         student = students[participant.participable_id]
         next unless student
 
-        new_hours = student.hours
-        new_hours -= participant.registered_hours if participant.registered_hours
-        new_hours += participant.hours
-
-        student.status = Student.update_hours(student, new_hours)
+        calculate_hours!(student, participant)
+        student.status = Student.eligible_status(student)
         students_to_update << student
-
-        participant.registered_hours = participant.hours
         participants_to_update << participant
       end
 
@@ -44,8 +39,36 @@ class Models::UpdateStudentHoursParticipation < ApplicationService
     @activity_week_participants
   end
 
+  def calculate_hours!(student, participant)
+    new_hours = student.hours
+    new_hours -= participant.registered_hours if participant.registered_hours
+    new_hours += participant.hours
+
+    acumulated_hours = student_hours_by_activity_sub_type(student, participant)
+
+    if (new_hours + acumulated_hours) <= participant.activity_sub_type.hours || participant.activity_sub_type.unlimited_hours
+      student.hours = (new_hours + acumulated_hours)
+      participant.registered_hours = participant.hours
+    else
+      student.hours = participant.activity_sub_type.hours
+      participant.registered_hours = student.hours - acumulated_hours 
+    end
+  end
+
+  def student_hours_by_activity_sub_type(student, participant)
+    hours_by_type = 0
+    student = student.activity_week_participants.each do |awp|
+      next unless awp.registered_hours
+      next if awp.id == participant.id || awp.activity_sub_type_id != participant.activity_sub_type_id
+
+      hours_by_type += awp.registered_hours
+    end
+
+    hours_by_type
+  end
+
   def students
-    @_students ||= Student.where(id: student_participants.map(&:participable_id).uniq).index_by(&:id)
+    @_students ||= Student.where(id: student_participants.map(&:participable_id).uniq).includes(:activity_week_participants).index_by(&:id)
   end
 
   def student_participants
