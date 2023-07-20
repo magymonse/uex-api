@@ -13,9 +13,12 @@ class Models::UpdateActivityWeekServices < ApplicationService
   def update!
     ActivityWeek.transaction do
       @activity_week.assign_attributes(@activity_week_params)
-      Models::RemoveStudentHoursParticipation.call(@activity_week.activity_week_participants) if @activity_week.activity_week_participants.any? { |p| p.registered_hours }
+      
+      # Business logic, only when at least one participant hour was registered we can update student hours
+      registered_hours = @activity_week.activity_week_participants.any? { |p| p.registered_hours }
+      Models::RemoveStudentHoursParticipation.call(@activity_week.activity_week_participants) if registered_hours
       @activity_week.save!
-      perform_update_student_hours(@activity_week.activity_week_participants) if @activity_week.activity_week_participants.any? { |p| p.registered_hours }
+      perform_update_student_hours(@activity_week.activity_week_participants) if registered_hours
     end
 
     @activity_week
