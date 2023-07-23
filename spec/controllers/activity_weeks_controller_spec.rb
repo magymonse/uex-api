@@ -53,10 +53,11 @@ describe Api::ActivityWeeksController, type: :controller do
 
       it "returns result message" do
         response_body = JSON.parse(response.body)["activity_week"]
+        activity_week.reload
 
         expect(response_body).to be_present
-        expect(response_body["start_date"]).to eq(activity_week_params[:start_date].to_s)
-        expect(response_body["end_date"]).to eq(activity_week_params[:end_date].to_s)
+        expect(response_body["start_date"]).to eq(I18n.l(activity_week.start_date, format: :default))
+        expect(response_body["end_date"]).to eq(I18n.l(activity_week.end_date, format: :default))
       end
 
       context "when failed to update resource" do
