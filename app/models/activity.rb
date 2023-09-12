@@ -43,8 +43,8 @@ class Activity < ApplicationRecord
   has_many :activity_careers, dependent: :destroy
   has_many :careers, through: :activity_careers
   has_many :activity_weeks, dependent: :destroy
-  has_many :activities_activity_sub_types
-  has_many :activity_sub_types, through: :activities_activity_sub_types
+  has_many :activities_activity_sub_types, dependent: :destroy
+  has_many :activity_sub_types, through: :activities_activity_sub_types, dependent: :destroy
   has_one :beneficiary_detail, dependent: :destroy
 
   validates_uniqueness_of :name
