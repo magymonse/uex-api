@@ -7,38 +7,86 @@
 #   Character.create(name: "Luke", movie: movies.first)
 
 # Create login user
-User.create(email: "admin@demo.com", password: "demo", username: "demo")
+User.create(email: "diep@fiuni.edu.py", password: "QueLindoSistemaUEX", username: "Admin")
+User.create(email: "diep+001@fiuni.edu.py", password: "QueLindoUEX2", username: "Secretaria")
 
 Career.create([{name: "Ingeniería Civil"}, {name: "Ingeniería Electromecánica"}, {name: "Ingeniería Informática"}])
 
-ActivityType.create([{name: "CURSOS EXTRACURRICULARES"},
-                    {name: "PRESTACIONES DE SERVICIOS"},
-                    {name: "EVENTOS ACADÉMICOS"}])
+ActivityType.create(
+  [
+    {
+      name: "Cursos extracurriculares",
+      description: "Cursos de formación y capacitación para estudiantes, docentes, investigadores, y funcionarios.",
+      activity_sub_types_attributes: [
+        {name: "Programas de formación, capacitación y actualización a la comunidad", hours: 10, unlimited_hours: false},
+        {name: "Charlas educativas de interés social y estudiantil", hours: 10, unlimited_hours: false},
+        {name: "Campañas de concienciación", hours: 10, unlimited_hours: false}
+      ]
+    },
+    {
+      name: "Prestaciones de servicios",
+      description: "Actividades de servicios propias a las carreras de la Facultad, o dentro de una asignatura, por los estudiantes, con orientación del jefe de cátedra.",
+      activity_sub_types_attributes: [
+        {name: "Servicios a la comunidad educativa, instituciones y sociedad general, bolsa de trabajo", hours: 20, unlimited_hours: false},
+        {name: "Actividades de laboratorio", hours: 20, unlimited_hours: false}
+      ]
+    },
+    {
+      name: "Asesorías a la comunidad",
+      description: "Actividades destinadas a proyectar a la sociedad el saber científico y técnico acumulado en el conocimiento o la experiencia universitaria.",
+      activity_sub_types_attributes: [
+        {name: "Consultoría", hours: 20, unlimited_hours: false},
+        {name: "Asistencia técnica", hours: 20, unlimited_hours: false}
+      ]
+    },
+    {
+      name: "Publicaciones",
+      description: "Transmisión de resultados y artículos académicos publicados en revistas, periódicos, páginas web u otros, a nivel nacional e internacional.",
+      activity_sub_types_attributes: [
+        {name: "Impresos: Artículos académicos publicados en periódicos y revistas", hours: 20, unlimited_hours: false},
+        {name: "Transmisiones electrónicas: artículos académicos publicados en páginas web u otros", hours: 20, unlimited_hours: false}
+      ]
+    },
+    {
+      name: "Eventos académicos",
+      description: "Para la actualización de estudiantes, docentes, egresados y público en general (congresos, seminarios, foros, paneles, conferencias, exposiciones, simposios, etc.), nacional e internacional.",
+      activity_sub_types_attributes: [
+        {name: "Como expositor", hours: 15, unlimited_hours: false},
+        {name: "Como participante", hours: 8, unlimited_hours: false},
+        {name: "Como organizador o voluntario", hours: 15, unlimited_hours: false}
+      ]
+    },
+    {
+      name: "Adquisición de experiencias y conocimientos",
+      description: "Prácticas de los estudiantes en su área de estudio a través de observaciones estructuradas y trabajo de campo.",
+      activity_sub_types_attributes: [
+        {name: "Trabajos de Campo (censos, entrevistas, encuestas)", hours: 10, unlimited_hours: false},
+        {name: "Viajes de Estudio (charlas sobre intercambios realizados)", hours: 8, unlimited_hours: false},
+        {name: "Participación en visitas técnicas, educativas", hours: 10, unlimited_hours: false}
+      ]
+    },
+    {
+      name: "Promoción",
+      description: "Promoción de carreras: se refiere a las actividades que dan a conocer a la sociedad las carreras ofrecidas por la Facultad.",
+      activity_sub_types_attributes: [
+        {name: "Promoción de carreras", hours: 10, unlimited_hours: false},
+        {name: "Otras promociones", hours: 8, unlimited_hours: false}
+      ]
+    },
+    {
+      name: "Actividades culturales",
+      description: "Actividades organizadas o en las que participa la facultad relacionadas con la música, teatro, danza, idioma, festivales, conciertos y otros.",
+      activity_sub_types_attributes: [
+        {name: "Música, teatro, danza, idiomas, festivales, conciertos y otros", hours: 10, unlimited_hours: false}
+      ]
+    },
+    {
+      name: "Deportes",
+      description: "Campeonatos, torneos, juegos internos, prácticas y otros.",
+      activity_sub_types_attributes: [
+        {name: "Participación como jugador", hours: 10, unlimited_hours: false}
+      ]
+    }
+  ])
 
-Organization.create([{name: "Integradevs", address: "Encarnacion", current_agreement: true, contact_name: "Veronica Solano"},
-                    {name: "Facultad de Ingeniería", address: "Encarnacion", current_agreement: true, contact_name: "Oscar Trochez"},
-                    {name: "CENADE", address: "Encarnacion", current_agreement: true, contact_name: "Jose Perez"}])
-
-students = [
-  {first_name: "Felix", last_name: "Rojas", email: "felixjas@fiuni.net", phone_number: "0972-962163", id_card: "3140126", address: "Encarnacion", sex: 0},
-  {first_name: "Alba", last_name: "Flores", email: "alba@fiuni.net", phone_number: "0996-266093", id_card: "4012208", address: "San Juan del Parana", sex: 1},
-  {first_name: "Emilio", last_name: "Herrera", email: "herreraemilio@fiuni.net", phone_number: "0961-147229", id_card: "5684899", address: "Cambyreta", sex: 0}
-]
-
-students.each do |st|
-  student = Student.new(career_id: Career.last.id)
-  student.build_person(st)
-  student.save
-end
-
-
-#professors = [
-#{first_name: "Mirta", last_name: "Arambulo", email: "mirta@fiuni.net", phone_number: "0981-595665", id_card: "2095417", address: "Encarnacion", sex: 1},
-#{first_name: "Arnaldo", last_name: "Ocampos", email: "arnaldo@fiuni.net", phone_number: "0982-944160", id_card: "1988475 ", address: "Encarnacion", sex: 0}
-#]
-
-#professors.each do |pro|
-#  professor = Professor.new(career_id: Career.last.id)
-#  professor.build_person(pro)
-#  professor.save
-#end
+Organization.create({name: "Facultad de Ingeniería", address: "Encarnacion", current_agreement: true, contact_name: "Oscar Tróchez"})

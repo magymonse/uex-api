@@ -46,6 +46,7 @@ class Api::ActivityWeeksController < Api::BaseController
     params[:activity_week][:activity_week_participants_attributes] = params[:activity_week].delete(:activity_week_participants)
     @activity_week_params = params
       .require(:activity_week)
-      .permit(:id, :activity_id, :start_date, :end_date, activity_week_participants_attributes: [:id, :activity_week_id, :activity_sub_type_id, :participable_id, :participable_type, :hours, :evaluation, :_destroy])
+      .permit(:id, :activity_id, :start_date, :end_date, activity_week_participants_attributes:
+        [:id, :activity_week_id, :activity_sub_type_id, :participable_id, :participable_type, :hours, :evaluation, :description, :_destroy])
   end
 end

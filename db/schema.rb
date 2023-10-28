@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_16_060119) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_23_225448) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -85,6 +85,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_16_060119) do
     t.datetime "updated_at", null: false
     t.bigint "activity_sub_type_id"
     t.integer "registered_hours"
+    t.string "description"
     t.index ["activity_sub_type_id"], name: "index_activity_week_participants_on_activity_sub_type_id"
     t.index ["activity_week_id"], name: "index_activity_week_participants_on_activity_week_id"
     t.index ["participable_type", "participable_id"], name: "index_activity_week_participants_on_participable"
@@ -158,7 +159,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_16_060119) do
     t.bigint "person_id", null: false
     t.integer "hours", default: 0
     t.boolean "submitted"
-    t.date "admission_year"
+    t.string "admission_year"
     t.bigint "career_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

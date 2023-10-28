@@ -16,4 +16,12 @@ class ActivityWeekParticipant < ApplicationRecord
       scope
     end
   end
+
+  def student?
+    participable_type == Student.to_s
+  end
+
+  def professor?
+    participable_type == Professor.to_s
+  end
 end
