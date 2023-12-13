@@ -16,15 +16,16 @@ class Exports::ProjectListReportGeneratorServices < ApplicationService
 
   def generate_xlsx_file
     Axlsx::Package.new do |p|
+      title = p.workbook.styles.add_style :b => true, :border => { :style => :thin, :color => "000000"}
+      wrap = p.workbook.styles.add_style alignment: {vertical: :center, wrap_text: true}, :border => { :style => :thin, :color => "000000"}
       p.workbook.add_worksheet(name: 'Table') do |sheet|
-        sheet.add_row ['Proyecto', 'Resolución', 'Fecha de Aprobación', 'Fecha de culminación según cronograma', 'Estudiantes', 'Objetivos', 'Coordinador', 'Estado', 'Informe']
+        sheet.add_row ['Proyecto', 'Resolución', 'Fecha de Aprobación', 'Fecha de culminación según cronograma', 'Estudiantes', 'Objetivos', 'Coordinador', 'Estado', 'Informe'], style: title
 
         index = 1
         activities = Activity.where("approved_at >= ? and approved_at <= ? ", @start_date, @end_date ).includes(activity_weeks: { activity_week_participants: {participable: :person}})
         activities.each do |activity|
           approved_at = I18n.l(activity.approved_at, format: :default)
           end_date = I18n.l(activity.end_date, format: :default)
-          wrap = p.workbook.styles.add_style alignment: {vertical: :center, wrap_text: true}
           sheet.add_row [activity.name, activity.resolution_number, approved_at, end_date, participants(activity), activity.objective, activity.professor.full_name, "", ""] , style: wrap
         end
       end
@@ -37,11 +38,13 @@ class Exports::ProjectListReportGeneratorServices < ApplicationService
     participants = {}
     activity.activity_weeks.each do |aw|
       aw.activity_week_participants.each do |awp|
-        person = awp.participable.person
-        participants[person.id] = person.full_name
+        if awp.participable_type == 'Student'
+          person = awp.participable.person
+          participants[person.id] = person.full_name
+        end
       end
     end
-    participants.values.join("/r")
+    participants.values.join("\r")
   end
 
   def file_name
